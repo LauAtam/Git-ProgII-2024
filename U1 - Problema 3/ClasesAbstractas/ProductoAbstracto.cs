@@ -19,6 +19,6 @@ namespace U1___Problema_3.ClasesAbstractas
             this.precio = precio;
         }
 
-        public abstract float calcularPrecio();
+        public abstract float CalcularPrecio();
     }
 }

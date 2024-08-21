@@ -8,6 +8,6 @@ namespace U1___Problema_3.Interfaces
 {
     internal interface IPrecio
     {
-        float calcularPrecio();
+        float CalcularPrecio();
     }
 }
