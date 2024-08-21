@@ -9,10 +9,16 @@ namespace U1___Problema_3.Clases
 {
     internal class Suelto : ProductoAbstracto
     {
-        public 
-        public override float calcularPrecio()
+        public float medida;
+
+        public Suelto(float medida, int codigo, string nombre, float precio) : base(codigo, nombre, precio)
         {
-            
+            this.medida = medida;
+        }
+
+        public override float CalcularPrecio()
+        {
+            return medida * precio;
         }
     }
 }
