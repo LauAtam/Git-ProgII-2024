@@ -8,7 +8,7 @@ namespace U1___Problema_5_v2.Dominio
 {
     internal class FormaPago
     {
-        public int Id { get; set; }
-        public string Nombre { get; set; }
+        public int id { get; set; }
+        public string nombre { get; set; }
     }
 }

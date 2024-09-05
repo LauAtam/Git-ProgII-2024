@@ -9,6 +9,10 @@ namespace U1___Problema_5_v2.Datos.Repositories
 {
     internal class DetalleFacturaRepository : Repository<DetalleFactura>
     {
+        public DetalleFacturaRepository() : base()
+        {
+            
+        }
         public override bool Delete(int id)
         {
             throw new NotImplementedException();

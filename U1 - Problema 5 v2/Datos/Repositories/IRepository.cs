@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace U1___Problema_5_v2.Datos.Repositories
 {
-    public interface IRepository<T>
+    public interface IRepository<TObject>
     {
-        List<T> GetAll();
-        T GetByID(int id);
-        bool Save(T o);
+        List<TObject> GetAll();
+        TObject GetByID(int id);
+        bool Save(TObject o);
         bool Delete(int id);
 
     }

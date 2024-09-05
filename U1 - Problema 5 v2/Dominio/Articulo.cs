@@ -8,14 +8,14 @@ namespace U1___Problema_5_v2.Dominio
 {
     internal class Articulo
     {
-        public int Id { get; set; }
-        public string Nombre { get; set; }
-        public float PrecioUnitario { get; set; }
+        public int id { get; set; }
+        public string nombre { get; set; }
+        public float precioUnitario { get; set; }
         public Articulo(int id, string nombre, float precioUnitario)
         {
-            this.Id = id;
-            this.Nombre = nombre;
-            this.PrecioUnitario = precioUnitario;
+            this.id = id;
+            this.nombre = nombre;
+            this.precioUnitario = precioUnitario;
         }
     }
 }

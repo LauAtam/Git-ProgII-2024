@@ -1,11 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
+﻿using System.Data;
 using System.Data.SqlClient;
-using System.Diagnostics.CodeAnalysis;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using U1___Problema_5_v2.Properties;
 
 namespace U1___Problema_5_v2.Datos
@@ -14,6 +8,7 @@ namespace U1___Problema_5_v2.Datos
     {
         private static DBHelper _instancia = null;
         private SqlConnection _conexion;
+
         private DBHelper()
         {
             _conexion = new SqlConnection(Resources.cadenaDeConexion);
@@ -31,21 +26,19 @@ namespace U1___Problema_5_v2.Datos
         /// Metodo para ejecutar consultas en la base de datos mediante
         /// stored procedures con una lista de ParametroSQL
         /// </summary>
-        /// <param name="spName"></param>
-        /// <param name="parametros"></param>
+        /// <param name="spName">Nombre del procedimiento almacenado</param>
+        /// <param name="parametros">Lista de objetos ParametroSQL(string Nombre, object Valor)</param>
         /// <returns>Tabla resultante de la consulta</returns>
         public DataTable? EjecutarSP(string spName, List<ParametroSQL>? parametros = null)
         {
             DataTable table = new DataTable();
+
+
             SqlCommand comandoSql = new SqlCommand(spName, _conexion);
             comandoSql.CommandType = CommandType.StoredProcedure;
             if (parametros != null)
-            {
                 foreach (ParametroSQL parametro in parametros)
-                {
                     comandoSql.Parameters.Add(new SqlParameter(parametro.Nombre, parametro.Valor));
-                }
-            }
             try
             {
                 using (_conexion)
@@ -70,8 +63,8 @@ namespace U1___Problema_5_v2.Datos
         /// <summary>
         /// Metodo para ejecutar consultas de tipo Data Modification Language
         /// </summary>
-        /// <param name="spName"></param>
-        /// <param name="parametros"></param>
+        /// <param name="spName">Nombre del procedimiento almacenado</param>
+        /// <param name="parametros">Lista de objetos ParametroSQL(string Nombre, object Valor)</param>
         /// <returns>Cantidad de filas afectadas</returns>
         public int EjecutarSPDML(string spName, List<ParametroSQL>? parametros = null)
         {

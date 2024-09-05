@@ -9,6 +9,10 @@ namespace U1___Problema_5_v2.Datos.Repositories
 {
     internal class FormaPagoRepository : Repository<FormaPago>
     {
+        public FormaPagoRepository() : base()
+        {
+            
+        }
         public override bool Delete(int id)
         {
             throw new NotImplementedException();
