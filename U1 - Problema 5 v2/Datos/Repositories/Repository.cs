@@ -12,6 +12,7 @@ namespace U1___Problema_5_v2.Datos.Repositories
     {
         protected DBHelper _helper;
         protected List<ParametroSQL> _parametros;
+        protected string _spName;
         public Repository()
         {
             _helper = DBHelper.ObtenerInstancia();

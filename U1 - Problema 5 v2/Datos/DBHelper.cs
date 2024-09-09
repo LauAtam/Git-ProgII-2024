@@ -32,8 +32,6 @@ namespace U1___Problema_5_v2.Datos
         public DataTable? EjecutarSP(string spName, List<ParametroSQL>? parametros = null)
         {
             DataTable table = new DataTable();
-
-
             SqlCommand comandoSql = new SqlCommand(spName, _conexion);
             comandoSql.CommandType = CommandType.StoredProcedure;
             if (parametros != null)

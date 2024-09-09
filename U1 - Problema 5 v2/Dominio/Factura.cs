@@ -8,18 +8,29 @@ namespace U1___Problema_5_v2.Dominio
 {
     public class Factura
     {
-        public int id { get; private set; }
-        public DateTime fecha { get; private set; }
-        public int idFormaPago { get; private set; }
-        public string nombreCliente { get; private set; }
-        public List<DetalleFactura> detalles { get; private set; }
-        public Factura(int id, DateTime fecha, int idFormaPago, string nombreCliente, List<DetalleFactura> detalles)
+        public int id { get; set; }
+        public DateTime fecha { get; set; }
+        public int idFormaPago { get; set; }
+        public string nombreCliente { get; set; }
+        public List<DetalleFactura> detalleFacturas { get; set; }
+        public Factura()
+        {
+            
+        }
+        public Factura(int id, DateTime fecha, int idFormaPago, string nombreCliente)
         {
             this.id  = id;
             this.fecha = fecha;
             this.idFormaPago = idFormaPago;
             this.nombreCliente = nombreCliente;
-            this.detalles = detalles;
+        }
+        public override string ToString()
+        {
+            return $"{id}\t-{fecha}\t-{idFormaPago}\t-{nombreCliente}-";
+        }
+        public void AgregarDetalle(DetalleFactura detalle)
+        {
+            throw new NotImplementedException();
         }
     }
 }
