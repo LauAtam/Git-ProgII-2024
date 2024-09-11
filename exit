@@ -1,0 +1,1297 @@
+[33mcommit c3e0418faef71026dfc85ff986d4598b5a0c511e[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m)[m
+Author: LauAtam <lautaroatampiz@gmail.com>
+Date:   Mon Sep 9 10:21:37 2024 -0300
+
+    refactorizacion de todo el codigo
+
+[1mdiff --git a/FirstWebAPI/Controllers/WeatherForecastController.cs b/FirstWebAPI/Controllers/WeatherForecastController.cs[m
+[1mnew file mode 100644[m
+[1mindex 0000000..42fcd1a[m
+[1m--- /dev/null[m
+[1m+++ b/FirstWebAPI/Controllers/WeatherForecastController.cs[m
+[36m@@ -0,0 +1,33 @@[m
+[32m+[m[32musing Microsoft.AspNetCore.Mvc;[m
+[32m+[m
+[32m+[m[32mnamespace FirstWebAPI.Controllers[m
+[32m+[m[32m{[m
+[32m+[m[32m    [ApiController][m
+[32m+[m[32m    [Route("[controller]")][m
+[32m+[m[32m    public class WeatherForecastController : ControllerBase[m
+[32m+[m[32m    {[m
+[32m+[m[32m        private static readonly string[] Summaries = new[][m
+[32m+[m[32m        {[m
+[32m+[m[32m            "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"[m
+[32m+[m[32m        };[m
+[32m+[m
+[32m+[m[32m        private readonly ILogger<WeatherForecastController> _logger;[m
+[32m+[m
+[32m+[m[32m        public WeatherForecastController(ILogger<WeatherForecastController> logger)[m
+[32m+[m[32m        {[m
+[32m+[m[32m            _logger = logger;[m
+[32m+[m[32m        }[m
+[32m+[m
+[32m+[m[32m        [HttpGet(Name = "GetWeatherForecast")][m
+[32m+[m[32m        public IEnumerable<WeatherForecast> Get()[m
+[32m+[m[32m        {[m
+[32m+[m[32m            return Enumerable.Range(1, 5).Select(index => new WeatherForecast[m
+[32m+[m[32m            {[m
+[32m+[m[32m                Date = DateOnly.FromDateTime(DateTime.Now.AddDays(index)),[m
+[32m+[m[32m                TemperatureC = Random.Shared.Next(-20, 55),[m
+[32m+[m[32m                Summary = Summaries[Random.Shared.Next(Summaries.Length)][m
+[32m+[m[32m            })[m
+[32m+[m[32m            .ToArray();[m
+[32m+[m[32m        }[m
+[32m+[m[32m    }[m
+[32m+[m[32m}[m
+[1mdiff --git a/FirstWebAPI/FirstWebAPI.csproj b/FirstWebAPI/FirstWebAPI.csproj[m
+[1mnew file mode 100644[m
+[1mindex 0000000..9daa180[m
+[1m--- /dev/null[m
+[1m+++ b/FirstWebAPI/FirstWebAPI.csproj[m
+[36m@@ -0,0 +1,13 @@[m
+[32m+[m[32m<Project Sdk="Microsoft.NET.Sdk.Web">[m
+[32m+[m
+[32m+[m[32m  <PropertyGroup>[m
+[32m+[m[32m    <TargetFramework>net8.0</TargetFramework>[m
+[32m+[m[32m    <Nullable>enable</Nullable>[m
+[32m+[m[32m    <ImplicitUsings>enable</ImplicitUsings>[m
+[32m+[m[32m  </PropertyGroup>[m
+[32m+[m
+[32m+[m[32m  <ItemGroup>[m
+[32m+[m[32m    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />[m
+[32m+[m[32m  </ItemGroup>[m
+[32m+[m
+[32m+[m[32m</Project>[m
+[1mdiff --git a/FirstWebAPI/FirstWebAPI.csproj.user b/FirstWebAPI/FirstWebAPI.csproj.user[m
+[1mnew file mode 100644[m
+[1mindex 0000000..db3a939[m
+[1m--- /dev/null[m
+[1m+++ b/FirstWebAPI/FirstWebAPI.csproj.user[m
+[36m@@ -0,0 +1,9 @@[m
+[32m+[m[32m﻿<?xml version="1.0" encoding="utf-8"?>[m
+[32m+[m[32m<Project ToolsVersion="Current" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">[m
+[32m+[m[32m  <PropertyGroup>[m
+[32m+[m[32m    <ActiveDebugProfile>IIS Express</ActiveDebugProfile>[m
+[32m+[m[32m  </PropertyGroup>[m
+[32m+[m[32m  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">[m
+[32m+[m[32m    <DebuggerFlavor>ProjectDebugger</DebuggerFlavor>[m
+[32m+[m[32m  </PropertyGroup>[m
+[32m+[m[32m</Project>[m
+\ No newline at end of file[m
+[1mdiff --git a/FirstWebAPI/FirstWebAPI.http b/FirstWebAPI/FirstWebAPI.http[m
+[1mnew file mode 100644[m
+[1mindex 0000000..c5bcb5a[m
+[1m--- /dev/null[m
+[1m+++ b/FirstWebAPI/FirstWebAPI.http[m
+[36m@@ -0,0 +1,6 @@[m
+[32m+[m[32m@FirstWebAPI_HostAddress = http://localhost:5088[m
+[32m+[m
+[32m+[m[32mGET {{FirstWebAPI_HostAddress}}/weatherforecast/[m
+[32m+[m[32mAccept: application/json[m
+[32m+[m
+[32m+[m[32m###[m
+[1mdiff --git a/U1 - Problema 5/U1 - Problema 5.sln b/FirstWebAPI/FirstWebAPI.sln[m
+[1msimilarity index 59%[m
+[1mrename from U1 - Problema 5/U1 - Problema 5.sln[m
+[1mrename to FirstWebAPI/FirstWebAPI.sln[m
+[1mindex 9d7c71d..6a09444 100644[m
+[1m--- a/U1 - Problema 5/U1 - Problema 5.sln[m	
+[1m+++ b/FirstWebAPI/FirstWebAPI.sln[m
+[36m@@ -3,7 +3,7 @@[m [mMicrosoft Visual Studio Solution File, Format Version 12.00[m
+ # Visual Studio Version 17[m
+ VisualStudioVersion = 17.10.35201.131[m
+ MinimumVisualStudioVersion = 10.0.40219.1[m
+[31m-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "U1 - Problema 5", "U1 - Problema 5.csproj", "{92D3E350-DE17-48BA-8D2C-1A75B4E9CE7E}"[m
+[32m+[m[32mProject("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FirstWebAPI", "FirstWebAPI.csproj", "{1210301C-C25A-43C9-A8B9-44A1808E36D0}"[m
+ EndProject[m
+ Global[m
+ 	GlobalSection(SolutionConfigurationPlatforms) = preSolution[m
+[36m@@ -11,15 +11,15 @@[m [mGlobal[m
+ 		Release|Any CPU = Release|Any CPU[m
+ 	EndGlobalSection[m
+ 	GlobalSection(ProjectConfigurationPlatforms) = postSolution[m
+[31m-		{92D3E350-DE17-48BA-8D2C-1A75B4E9CE7E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU[m
+[31m-		{92D3E350-DE17-48BA-8D2C-1A75B4E9CE7E}.Debug|Any CPU.Build.0 = Debug|Any CPU[m
+[31m-		{92D3E350-DE17-48BA-8D2C-1A75B4E9CE7E}.Release|Any CPU.ActiveCfg = Release|Any CPU[m
+[31m-		{92D3E350-DE17-48BA-8D2C-1A75B4E9CE7E}.Release|Any CPU.Build.0 = Release|Any CPU[m
+[32m+[m		[32m{1210301C-C25A-43C9-A8B9-44A1808E36D0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU[m
+[32m+[m		[32m{1210301C-C25A-43C9-A8B9-44A1808E36D0}.Debug|Any CPU.Build.0 = Debug|Any CPU[m
+[32m+[m		[32m{1210301C-C25A-43C9-A8B9-44A1808E36D0}.Release|Any CPU.ActiveCfg = Release|Any CPU[m
+[32m+[m		[32m{1210301C-C25A-43C9-A8B9-44A1808E36D0}.Release|Any CPU.Build.0 = Release|Any CPU[m
+ 	EndGlobalSection[m
+ 	GlobalSection(SolutionProperties) = preSolution[m
+ 		HideSolutionNode = FALSE[m
+ 	EndGlobalSection[m
+ 	GlobalSection(ExtensibilityGlobals) = postSolution[m
+[31m-		SolutionGuid = {8E5934E1-D35F-40E3-926A-818CAAC142E8}[m
+[32m+[m		[32mSolutionGuid = {6CB11A86-C7D5-4A64-97FC-3AC4434908CE}[m
+ 	EndGlobalSection[m
+ EndGlobal[m
+[1mdiff --git a/FirstWebAPI/Program.cs b/FirstWebAPI/Program.cs[m
+[1mnew file mode 100644[m
+[1mindex 0000000..067061e[m
+[1m--- /dev/null[m
+[1m+++ b/FirstWebAPI/Program.cs[m
+[36m@@ -0,0 +1,36 @@[m
+[32m+[m
+[32m+[m[32mnamespace FirstWebAPI[m
+[32m+[m[32m{[m
+[32m+[m[32m    public class Program[m
+[32m+[m[32m    {[m
+[32m+[m[32m        public static void Main(string[] args)[m
+[32m+[m[32m        {[m
+[32m+[m[32m            var builder = WebApplication.CreateBuilder(args);[m
+[32m+[m
+[32m+[m[32m            // Add services to the container.[m
+[32m+[m
+[32m+[m[32m            builder.Services.AddControllers();[m
+[32m+[m[32m            // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle[m
+[32m+[m[32m            builder.Services.AddEndpointsApiExplorer();[m
+[32m+[m[32m            builder.Services.AddSwaggerGen();[m
+[32m+[m
+[32m+[m[32m            var app = builder.Build();[m
+[32m+[m
+[32m+[m[32m            // Configure the HTTP request pipeline.[m
+[32m+[m[32m            if (app.Environment.IsDevelopment())[m
+[32m+[m[32m            {[m
+[32m+[m[32m                app.UseSwagger();[m
+[32m+[m[32m                app.UseSwaggerUI();[m
+[32m+[m[32m            }[m
+[32m+[m
+[32m+[m[32m            app.UseHttpsRedirection();[m
+[32m+[m
+[32m+[m[32m            app.UseAuthorization();[m
+[32m+[m
+[32m+[m
+[32m+[m[32m            app.MapControllers();[m
+[32m+[m
+[32m+[m[32m            app.Run();[m
+[32m+[m[32m        }[m
+[32m+[m[32m    }[m
+[32m+[m[32m}[m
+[1mdiff --git a/FirstWebAPI/Properties/launchSettings.json b/FirstWebAPI/Properties/launchSettings.json[m
+[1mnew file mode 100644[m
+[1mindex 0000000..5646dca[m
+[1m--- /dev/null[m
+[1m+++ b/FirstWebAPI/Properties/launchSettings.json[m
+[36m@@ -0,0 +1,41 @@[m
+[32m+[m[32m﻿{[m
+[32m+[m[32m  "$schema": "http://json.schemastore.org/launchsettings.json",[m
+[32m+[m[32m  "iisSettings": {[m
+[32m+[m[32m    "windowsAuthentication": false,[m
+[32m+[m[32m    "anonymousAuthentication": true,[m
+[32m+[m[32m    "iisExpress": {[m
+[32m+[m[32m      "applicationUrl": "http://localhost:26970",[m
+[32m+[m[32m      "sslPort": 44380[m
+[32m+[m[32m    }[m
+[32m+[m[32m  },[m
+[32m+[m[32m  "profiles": {[m
+[32m+[m[32m    "http": {[m
+[32m+[m[32m      "commandName": "Project",[m
+[32m+[m[32m      "dotnetRunMessages": true,[m
+[32m+[m[32m      "launchBrowser": true,[m
+[32m+[m[32m      "launchUrl": "swagger",[m
+[32m+[m[32m      "applicationUrl": "http://localhost:5088",[m
+[32m+[m[32m      "environmentVariables": {[m
+[32m+[m[32m        "ASPNETCORE_ENVIRONMENT": "Development"[m
+[32m+[m[32m      }[m
+[32m+[m[32m    },[m
+[32m+[m[32m    "https": {[m
+[32m+[m[32m      "commandName": "Project",[m
+[32m+[m[32m      "dotnetRunMessages": true,[m
+[32m+[m[32m      "launchBrowser": true,[m
+[32m+[m[32m      "launchUrl": "swagger",[m
+[32m+[m[32m      "applicationUrl": "https://localhost:7221;http://localhost:5088",[m
+[32m+[m[32m      "environmentVariables": {[m
+[32m+[m[32m        "ASPNETCORE_ENVIRONMENT": "Development"[m
+[32m+[m[32m      }[m
+[32m+[m[32m    },[m
+[32m+[m[32m    "IIS Express": {[m
+[32m+[m[32m      "commandName": "IISExpress",[m
+[32m+[m[32m      "launchBrowser": true,[m
+[32m+[m[32m      "launchUrl": "swagger",[m
+[32m+[m[32m      "environmentVariables": {[m
+[32m+[m[32m        "ASPNETCORE_ENVIRONMENT": "Development"[m
+[32m+[m[32m      }[m
+[32m+[m[32m    }[m
+[32m+[m[32m  }[m
+[32m+[m[32m}[m
+[1mdiff --git a/FirstWebAPI/WeatherForecast.cs b/FirstWebAPI/WeatherForecast.cs[m
+[1mnew file mode 100644[m
+[1mindex 0000000..0fecd71[m
+[1m--- /dev/null[m
+[1m+++ b/FirstWebAPI/WeatherForecast.cs[m
+[36m@@ -0,0 +1,13 @@[m
+[32m+[m[32mnamespace FirstWebAPI[m
+[32m+[m[32m{[m
+[32m+[m[32m    public class WeatherForecast[m
+[32m+[m[32m    {[m
+[32m+[m[32m        public DateOnly Date { get; set; }[m
+[32m+[m
+[32m+[m[32m        public int TemperatureC { get; set; }[m
+[32m+[m
+[32m+[m[32m        public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);[m
+[32m+[m
+[32m+[m[32m        public string? Summary { get; set; }[m
+[32m+[m[32m    }[m
+[32m+[m[32m}[m
+[1mdiff --git a/FirstWebAPI/appsettings.Development.json b/FirstWebAPI/appsettings.Development.json[m
+[1mnew file mode 100644[m
+[1mindex 0000000..0c208ae[m
+[1m--- /dev/null[m
+[1m+++ b/FirstWebAPI/appsettings.Development.json[m
+[36m@@ -0,0 +1,8 @@[m
+[32m+[m[32m{[m
+[32m+[m[32m  "Logging": {[m
+[32m+[m[32m    "LogLevel": {[m
+[32m+[m[32m      "Default": "Information",[m
+[32m+[m[32m      "Microsoft.AspNetCore": "Warning"[m
+[32m+[m[32m    }[m
+[32m+[m[32m  }[m
+[32m+[m[32m}[m
+[1mdiff --git a/FirstWebAPI/appsettings.json b/FirstWebAPI/appsettings.json[m
+[1mnew file mode 100644[m
+[1mindex 0000000..10f68b8[m
+[1m--- /dev/null[m
+[1m+++ b/FirstWebAPI/appsettings.json[m
+[36m@@ -0,0 +1,9 @@[m
+[32m+[m[32m{[m
+[32m+[m[32m  "Logging": {[m
+[32m+[m[32m    "LogLevel": {[m
+[32m+[m[32m      "Default": "Information",[m
+[32m+[m[32m      "Microsoft.AspNetCore": "Warning"[m
+[32m+[m[32m    }[m
+[32m+[m[32m  },[m
+[32m+[m[32m  "AllowedHosts": "*"[m
+[32m+[m[32m}[m
+[1mdiff --git a/U1 - Problema 5 v2/Datos/DBHelper.cs b/U1 - Problema 5 v2/Datos/DBHelper.cs[m
+[1mindex f49ceb0..eb2dbdf 100644[m
+[1m--- a/U1 - Problema 5 v2/Datos/DBHelper.cs[m	
+[1m+++ b/U1 - Problema 5 v2/Datos/DBHelper.cs[m	
+[36m@@ -32,8 +32,6 @@[m [mnamespace U1___Problema_5_v2.Datos[m
+         public DataTable? EjecutarSP(string spName, List<ParametroSQL>? parametros = null)[m
+         {[m
+             DataTable table = new DataTable();[m
+[31m-[m
+[31m-[m
+             SqlCommand comandoSql = new SqlCommand(spName, _conexion);[m
+             comandoSql.CommandType = CommandType.StoredProcedure;[m
+             if (parametros != null)[m
+[1mdiff --git a/U1 - Problema 5 v2/Datos/Repositories/FacturaRepository.cs b/U1 - Problema 5 v2/Datos/Repositories/FacturaRepository.cs[m
+[1mindex 1fa916e..aefeca8 100644[m
+[1m--- a/U1 - Problema 5 v2/Datos/Repositories/FacturaRepository.cs[m	
+[1m+++ b/U1 - Problema 5 v2/Datos/Repositories/FacturaRepository.cs[m	
+[36m@@ -1,5 +1,7 @@[m
+ ﻿using System;[m
+ using System.Collections.Generic;[m
+[32m+[m[32musing System.Data;[m
+[32m+[m[32musing System.Data.SqlClient;[m
+ using System.Linq;[m
+ using System.Text;[m
+ using System.Threading.Tasks;[m
+[36m@@ -8,33 +10,65 @@[m [musing U1___Problema_5_v2.Dominio;[m
+ namespace U1___Problema_5_v2.Datos.Repositories[m
+ {[m
+     internal class FacturaRepository : Repository<Factura>[m
+[31m-    { [m
+[31m-        public FacturaRepository() : base()[m
+[31m-        {[m
+[31m-            [m
+[31m-        }[m
+[32m+[m[32m    {[m
+[32m+[m[32m        public FacturaRepository() : base() { }[m
+         public override bool Delete(int id)[m
+         {[m
+[31m-            string spName = "SP_ELIMINAR_FACTURA";[m
+[32m+[m[32m            _spName = "SP_ELIMINAR_FACTURA";[m
+             int lineas = 0;[m
+             _parametros.Add(new ParametroSQL("@id", id));[m
+[31m-            lineas = _helper.EjecutarSPDML(spName, _parametros);[m
+[32m+[m[32m            lineas = _helper.EjecutarSPDML(_spName, _parametros);[m
+             return lineas == 1;[m
+         }[m
+ [m
+         public override List<Factura> GetAll()[m
+         {[m
+[31m-            throw new NotImplementedException();[m
+[32m+[m[32m            _spName = "SP_RECUPERAR_FACTURAS";[m
+[32m+[m[32m            DataTable table = _helper.EjecutarSP(_spName);[m
+[32m+[m[32m            List<Factura> facturas = new List<Factura>();[m
+[32m+[m[32m            foreach (DataRow row in table.Rows)[m
+[32m+[m[32m            {[m
+[32m+[m[32m                int id = Convert.ToInt32(row["ID"]);[m
+[32m+[m[32m                DateTime fecha = Convert.ToDateTime(row["fecha"]);[m
+[32m+[m[32m                int idFormaPago = Convert.ToInt32(row["id_forma_pago"]);[m
+[32m+[m[32m                string nombreCliente = Convert.ToString(row["nombre_cliente"]);[m
+[32m+[m[32m                Factura factura = new Factura(id, fecha, idFormaPago, nombreCliente);[m
+[32m+[m[32m                facturas.Add(factura);[m
+[32m+[m[32m            }[m
+[32m+[m[32m            _parametros.Clear();[m
+[32m+[m[32m            return facturas;[m
+         }[m
+ [m
+         public override Factura GetByID(int id)[m
+         {[m
+[31m-            throw new NotImplementedException();[m
+[32m+[m[32m            _spName = "SP_RECUPERAR_FACTURA_POR_ID";[m
+[32m+[m[32m            _parametros.Add(new ParametroSQL("@id", id));[m
+[32m+[m[32m            DataTable table = new DataTable();[m
+[32m+[m[32m            table = _helper.EjecutarSP(_spName, _parametros);[m
+[32m+[m[32m            _parametros.Clear();[m
+[32m+[m[32m            if (table != null && table.Rows.Count == 1)[m
+[32m+[m[32m            {[m
+[32m+[m[32m                DataRow row = table.Rows[0];[m
+[32m+[m[32m                Factura factura = new Factura();[m
+[32m+[m[32m                factura.id = Convert.ToInt32(row["ID"]);[m
+[32m+[m[32m                factura.fecha = Convert.ToDateTime(row["fecha"]);[m
+[32m+[m[32m                factura.idFormaPago = Convert.ToInt32(row["id_forma_pago"]);[m
+[32m+[m[32m                factura.nombreCliente = Convert.ToString(row["nombre_cliente"]);[m
+[32m+[m[32m                return factura;[m
+[32m+[m[32m            }[m
+[32m+[m[32m            return null;[m
+         }[m
+ [m
+         public override bool Save(Factura o)[m
+         {[m
+[31m-            throw new NotImplementedException();[m
+[32m+[m[32m            _spName = "SP_GUARDAR_FACTURA";[m
+[32m+[m[32m            _parametros.Add(new ParametroSQL("@fecha", o.fecha));[m
+[32m+[m[32m            _parametros.Add(new ParametroSQL("@id_forma_pago", o.idFormaPago));[m
+[32m+[m[32m            _parametros.Add(new ParametroSQL("@nombre_cliente", o.nombreCliente));[m
+[32m+[m[32m            int rows = _helper.EjecutarSPDML(_spName, _parametros);[m
+[32m+[m[32m            _parametros.Clear();[m
+[32m+[m[32m            return rows == 1;[m
+[32m+[m
+         }[m
+     }[m
+ }[m
+[1mdiff --git a/U1 - Problema 5 v2/Datos/Repositories/Repository.cs b/U1 - Problema 5 v2/Datos/Repositories/Repository.cs[m
+[1mindex 4c8a1e7..aae4b15 100644[m
+[1m--- a/U1 - Problema 5 v2/Datos/Repositories/Repository.cs[m	
+[1m+++ b/U1 - Problema 5 v2/Datos/Repositories/Repository.cs[m	
+[36m@@ -12,6 +12,7 @@[m [mnamespace U1___Problema_5_v2.Datos.Repositories[m
+     {[m
+         protected DBHelper _helper;[m
+         protected List<ParametroSQL> _parametros;[m
+[32m+[m[32m        protected string _spName;[m
+         public Repository()[m
+         {[m
+             _helper = DBHelper.ObtenerInstancia();[m
+[1mdiff --git a/U1 - Problema 5 v2/Dominio/Factura.cs b/U1 - Problema 5 v2/Dominio/Factura.cs[m
+[1mindex 835900f..92173fd 100644[m
+[1m--- a/U1 - Problema 5 v2/Dominio/Factura.cs[m	
+[1m+++ b/U1 - Problema 5 v2/Dominio/Factura.cs[m	
+[36m@@ -8,18 +8,29 @@[m [mnamespace U1___Problema_5_v2.Dominio[m
+ {[m
+     public class Factura[m
+     {[m
+[31m-        public int id { get; private set; }[m
+[31m-        public DateTime fecha { get; private set; }[m
+[31m-        public int idFormaPago { get; private set; }[m
+[31m-        public string nombreCliente { get; private set; }[m
+[31m-        public List<DetalleFactura> detalles { get; private set; }[m
+[31m-        public Factura(int id, DateTime fecha, int idFormaPago, string nombreCliente, List<DetalleFactura> detalles)[m
+[32m+[m[32m        public int id { get; set; }[m
+[32m+[m[32m        public DateTime fecha { get; set; }[m
+[32m+[m[32m        public int idFormaPago { get; set; }[m
+[32m+[m[32m        public string nombreCliente { get; set; }[m
+[32m+[m[32m        public List<DetalleFactura> detalleFacturas { get; set; }[m
+[32m+[m[32m        public Factura()[m
+[32m+[m[32m        {[m
+[32m+[m[41m            [m
+[32m+[m[32m        }[m
+[32m+[m[32m        public Factura(int id, DateTime fecha, int idFormaPago, string nombreCliente)[m
+         {[m
+             this.id  = id;[m
+             this.fecha = fecha;[m
+             this.idFormaPago = idFormaPago;[m
+             this.nombreCliente = nombreCliente;[m
+[31m-            this.detalles = detalles;[m
+[32m+[m[32m        }[m
+[32m+[m[32m        public override string ToString()[m
+[32m+[m[32m        {[m
+[32m+[m[32m            return $"{id}\t-{fecha}\t-{idFormaPago}\t-{nombreCliente}-";[m
+[32m+[m[32m        }[m
+[32m+[m[32m        public void AgregarDetalle(DetalleFactura detalle)[m
+[32m+[m[32m        {[m
+[32m+[m[32m            throw new NotImplementedException();[m
+         }[m
+     }[m
+ }[m
+[1mdiff --git a/U1 - Problema 5/Dominio/Clases/AccesoDatos.cs b/U1 - Problema 5/Dominio/Clases/AccesoDatos.cs[m
+[1mdeleted file mode 100644[m
+[1mindex 9caf90a..0000000[m
+[1m--- a/U1 - Problema 5/Dominio/Clases/AccesoDatos.cs[m	
+[1m+++ /dev/null[m
+[36m@@ -1,57 +0,0 @@[m
+[31m-﻿using System;[m
+[31m-using System.Collections.Generic;[m
+[31m-using System.Data;[m
+[31m-using System.Data.SqlClient;[m
+[31m-using System.Linq;[m
+[31m-using System.Text;[m
+[31m-using System.Threading.Tasks;[m
+[31m-using U1___Problema_5.Dominio.Interfaces;[m
+[31m-[m
+[31m-namespace U1___Problema_5.Dominio.Clases[m
+[31m-{[m
+[31m-    public class AccesoDatos[m
+[31m-    {[m
+[31m-        private static AccesoDatos _acceso;[m
+[31m-        static SqlConnection conexion;[m
+[31m-        SqlCommand cmd;[m
+[31m-        [m
+[31m-        private AccesoDatos()[m
+[31m-        {[m
+[31m-            conexion = new SqlConnection(Properties.Resources.CadenaConexion);[m
+[31m-            cmd = new SqlCommand();[m
+[31m-            cmd.Connection = conexion;[m
+[31m-        }[m
+[31m-[m
+[31m-        public static AccesoDatos ObtenerInstancia()[m
+[31m-        {[m
+[31m-            if (_acceso == null)[m
+[31m-            {[m
+[31m-                _acceso = new AccesoDatos();[m
+[31m-            }[m
+[31m-            return _acceso;[m
+[31m-        }[m
+[31m-[m
+[31m-        public static DataTable Consultar(string sp)[m
+[31m-        {[m
+[31m-            DataTable dt = new DataTable();[m
+[31m-            conexion.Open();[m
+[31m-            AccesoDatos a = ObtenerInstancia();[m
+[31m-            a.cmd.CommandText = sp;[m
+[31m-            a.cmd.CommandType = CommandType.StoredProcedure;[m
+[31m-            dt.Load(a.cmd.ExecuteReader());[m
+[31m-            conexion.Close();[m
+[31m-            return dt;[m
+[31m-        }[m
+[31m-        public static bool EjecutarSp(string sp, int id)[m
+[31m-        {[m
+[31m-            bool aux = false;[m
+[31m-            conexion.Open();[m
+[31m-            AccesoDatos a = ObtenerInstancia();[m
+[31m-            a.cmd.Parameters.AddWithValue("@id", id);[m
+[31m-            a.cmd.CommandText = sp;[m
+[31m-            a.cmd.CommandType = CommandType.StoredProcedure;[m
+[31m-            return a.cmd.ExecuteNonQuery() >0;[m
+[31m-            conexion.Close();[m
+[31m-        }[m
+[31m-    }[m
+[31m-}[m
+[1mdiff --git a/U1 - Problema 5/Dominio/Clases/Articulos.cs b/U1 - Problema 5/Dominio/Clases/Articulos.cs[m
+[1mdeleted file mode 100644[m
+[1mindex 8ea4725..0000000[m
+[1m--- a/U1 - Problema 5/Dominio/Clases/Articulos.cs[m	
+[1m+++ /dev/null[m
+[36m@@ -1,28 +0,0 @@[m
+[31m-﻿using System;[m
+[31m-using System.Collections.Generic;[m
+[31m-using System.Linq;[m
+[31m-using System.Text;[m
+[31m-using System.Threading.Tasks;[m
+[31m-[m
+[31m-namespace U1___Problema_5.Dominio.Clases[m
+[31m-{[m
+[31m-    internal class Articulos[m
+[31m-    {[m
+[31m-        private int id;[m
+[31m-        private string nombre;[m
+[31m-        private float precioUnitario;[m
+[31m-[m
+[31m-        public Articulos(int id,string nombre,float precioU)[m
+[31m-        {[m
+[31m-            this.id = id;[m
+[31m-            this.nombre = nombre;[m
+[31m-            precioUnitario = precioU;[m
+[31m-        }[m
+[31m-        public Articulos()[m
+[31m-        {[m
+[31m-            id = 0;[m
+[31m-            nombre = string.Empty;[m
+[31m-            precioUnitario=0;[m
+[31m-        }[m
+[31m-    }[m
+[31m-}[m
+[1mdiff --git a/U1 - Problema 5/Dominio/Interfaces/IServicio.cs b/U1 - Problema 5/Dominio/Interfaces/IServicio.cs[m
+[1mdeleted file mode 100644[m
+[1mindex 9d10115..0000000[m
+[1m--- a/U1 - Problema 5/Dominio/Interfaces/IServicio.cs[m	
+[1m+++ /dev/null[m
+[36m@@ -1,20 +0,0 @@[m
+[31m-﻿using System;[m
+[31m-using System.Collections.Generic;[m
+[31m-using System.Data;[m
+[31m-using System.Linq;[m
+[31m-using System.Text;[m
+[31m-using System.Threading.Tasks;[m
+[31m-[m
+[31m-namespace U1___Problema_5.Dominio.Interfaces[m
+[31m-{[m
+[31m-    public interface IServicio[m
+[31m-    {[m
+[31m-        void Crear();[m
+[31m-        void Actualizar();[m
+[31m-[m
+[31m-        DataTable Consultar(string sp);[m
+[31m-        void Eliminar();[m
+[31m-[m
+[31m-        [m
+[31m-    }[m
+[31m-}[m
+[1mdiff --git a/U1 - Problema 5/Dominio/Servicios/ServicioAbstracto.cs b/U1 - Problema 5/Dominio/Servicios/ServicioAbstracto.cs[m
+[1mdeleted file mode 100644[m
+[1mindex b9379ab..0000000[m
+[1m--- a/U1 - Problema 5/Dominio/Servicios/ServicioAbstracto.cs[m	
+[1m+++ /dev/null[m
+[36m@@ -1,34 +0,0 @@[m
+[31m-﻿using System;[m
+[31m-using System.Collections.Generic;[m
+[31m-using System.Data;[m
+[31m-using System.Linq;[m
+[31m-using System.Text;[m
+[31m-using System.Threading.Tasks;[m
+[31m-using U1___Problema_5.Dominio.Clases;[m
+[31m-using U1___Problema_5.Dominio.Interfaces;[m
+[31m-[m
+[31m-namespace U1___Problema_5.Dominio.Servicios[m
+[31m-{[m
+[31m-    internal class ServicioAbstracto : IServicio[m
+[31m-    {[m
+[31m-        public void Actualizar()[m
+[31m-        {[m
+[31m-            throw new NotImplementedException();[m
+[31m-        }[m
+[31m-[m
+[31m-        public DataTable Consultar(string sp)[m
+[31m-        {[m
+[31m-            return AccesoDatos.Consultar(sp);   [m
+[31m-        }[m
+[31m-[m
+[31m-        public void Crear()[m
+[31m-        {[m
+[31m-            throw new NotImplementedException();[m
+[31m-        }[m
+[31m-[m
+[31m-        public void Eliminar(string sp, int id)[m
+[31m-        {[m
+[31m-            AccesoDatos.EjecutarSp(sp, id);[m
+[31m-        }[m
+[31m-    }[m
+[31m-}[m
+[1mdiff --git a/U1 - Problema 5/Program.cs b/U1 - Problema 5/Program.cs[m
+[1mdeleted file mode 100644[m
+[1mindex 7ea46b2..0000000[m
+[1m--- a/U1 - Problema 5/Program.cs[m	
+[1m+++ /dev/null[m
+[36m@@ -1,10 +0,0 @@[m
+[31m-﻿namespace U1___Problema_5[m
+[31m-{[m
+[31m-    internal class Program[m
+[31m-    {[m
+[31m-        static void Main(string[] args)[m
+[31m-        {[m
+[31m-            Console.WriteLine("Hello, World!");[m
+[31m-        }[m
+[31m-    }[m
+[31m-}[m
+[1mdiff --git a/U1 - Problema 5/Properties/Resources.Designer.cs b/U1 - Problema 5/Properties/Resources.Designer.cs[m
+[1mdeleted file mode 100644[m
+[1mindex 213bbc2..0000000[m
+[1m--- a/U1 - Problema 5/Properties/Resources.Designer.cs[m	
+[1m+++ /dev/null[m
+[36m@@ -1,72 +0,0 @@[m
+[31m-﻿//------------------------------------------------------------------------------[m
+[31m-// <auto-generated>[m
+[31m-//     Este código fue generado por una herramienta.[m
+[31m-//     Versión de runtime:4.0.30319.42000[m
+[31m-//[m
+[31m-//     Los cambios en este archivo podrían causar un comportamiento incorrecto y se perderán si[m
+[31m-//     se vuelve a generar el código.[m
+[31m-// </auto-generated>[m
+[31m-//------------------------------------------------------------------------------[m
+[31m-[m
+[31m-namespace U1___Problema_5.Properties {[m
+[31m-    using System;[m
+[31m-    [m
+[31m-    [m
+[31m-    /// <summary>[m
+[31m-    ///   Clase de recurso fuertemente tipado, para buscar cadenas traducidas, etc.[m
+[31m-    /// </summary>[m
+[31m-    // StronglyTypedResourceBuilder generó automáticamente esta clase[m
+[31m-    // a través de una herramienta como ResGen o Visual Studio.[m
+[31m-    // Para agregar o quitar un miembro, edite el archivo .ResX y, a continuación, vuelva a ejecutar ResGen[m
+[31m-    // con la opción /str o recompile su proyecto de VS.[m
+[31m-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")][m
+[31m-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute()][m
+[31m-    [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()][m
+[31m-    internal class Resources {[m
+[31m-        [m
+[31m-        private static global::System.Resources.ResourceManager resourceMan;[m
+[31m-        [m
+[31m-        private static global::System.Globalization.CultureInfo resourceCulture;[m
+[31m-        [m
+[31m-        [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")][m
+[31m-        internal Resources() {[m
+[31m-        }[m
+[31m-        [m
+[31m-        /// <summary>[m
+[31m-        ///   Devuelve la instancia de ResourceManager almacenada en caché utilizada por esta clase.[m
+[31m-        /// </summary>[m
+[31m-        [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)][m
+[31m-        internal static global::System.Resources.ResourceManager ResourceManager {[m
+[31m-            get {[m
+[31m-                if (object.ReferenceEquals(resourceMan, null)) {[m
+[31m-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("U1___Problema_5.Properties.Resources", typeof(Resources).Assembly);[m
+[31m-                    resourceMan = temp;[m
+[31m-                }[m
+[31m-                return resourceMan;[m
+[31m-            }[m
+[31m-        }[m
+[31m-        [m
+[31m-        /// <summary>[m
+[31m-        ///   Reemplaza la propiedad CurrentUICulture del subproceso actual para todas las[m
+[31m-        ///   búsquedas de recursos mediante esta clase de recurso fuertemente tipado.[m
+[31m-        /// </summary>[m
+[31m-        [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)][m
+[31m-        internal static global::System.Globalization.CultureInfo Culture {[m
+[31m-            get {[m
+[31m-                return resourceCulture;[m
+[31m-            }[m
+[31m-            set {[m
+[31m-                resourceCulture = value;[m
+[31m-            }[m
+[31m-        }[m
+[31m-        [m
+[31m-        /// <summary>[m
+[31m-        ///   Busca una cadena traducida similar a Data Source=LAUTAROATAMPIZ;Initial Catalog=Facturas;Integrated Security=True.[m
+[31m-        /// </summary>[m
+[31m-        internal static string CadenaConexion {[m
+[31m-            get {[m
+[31m-                return ResourceManager.GetString("CadenaConexion", resourceCulture);[m
+[31m-            }[m
+[31m-        }[m
+[31m-    }[m
+[31m-}[m
+[1mdiff --git a/U1 - Problema 5/Properties/Resources.resx b/U1 - Problema 5/Properties/Resources.resx[m
+[1mdeleted file mode 100644[m
+[1mindex 801fd14..0000000[m
+[1m--- a/U1 - Problema 5/Properties/Resources.resx[m	
+[1m+++ /dev/null[m
+[36m@@ -1,123 +0,0 @@[m
+[31m-﻿<?xml version="1.0" encoding="utf-8"?>[m
+[31m-<root>[m
+[31m-  <!-- [m
+[31m-    Microsoft ResX Schema [m
+[31m-    [m
+[31m-    Version 2.0[m
+[31m-    [m
+[31m-    The primary goals of this format is to allow a simple XML format [m
+[31m-    that is mostly human readable. The generation and parsing of the [m
+[31m-    various data types are done through the TypeConverter classes [m
+[31m-    associated with the data types.[m
+[31m-    [m
+[31m-    Example:[m
+[31m-    [m
+[31m-    ... ado.net/XML headers & schema ...[m
+[31m-    <resheader name="resmimetype">text/microsoft-resx</resheader>[m
+[31m-    <resheader name="version">2.0</resheader>[m
+[31m-    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>[m
+[31m-    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>[m
+[31m-    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>[m
+[31m-    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>[m
+[31m-    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">[m
+[31m-        <value>[base64 mime encoded serialized .NET Framework object]</value>[m
+[31m-    </data>[m
+[31m-    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">[m
+[31m-        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>[m
+[31m-        <comment>This is a comment</comment>[m
+[31m-    </data>[m
+[31m-                [m
+[31m-    There are any number of "resheader" rows that contain simple [m
+[31m-    name/value pairs.[m
+[31m-    [m
+[31m-    Each data row contains a name, and value. The row also contains a [m
+[31m-    type or mimetype. Type corresponds to a .NET class that support [m
+[31m-    text/value conversion through the TypeConverter architecture. [m
+[31m-    Classes that don't support this are serialized and stored with the [m
+[31m-    mimetype set.[m
+[31m-    [m
+[31m-    The mimetype is used for serialized objects, and tells the [m
+[31m-    ResXResourceReader how to depersist the object. This is currently not [m
+[31m-    extensible. For a given mimetype the value must be set accordingly:[m
+[31m-    [m
+[31m-    Note - application/x-microsoft.net.object.binary.base64 is the format [m
+[31m-    that the ResXResourceWriter will generate, however the reader can [m
+[31m-    read any of the formats listed below.[m
+[31m-    [m
+[31m-    mimetype: application/x-microsoft.net.object.binary.base64[m
+[31m-    value   : The object must be serialized with [m
+[31m-            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter[m
+[31m-            : and then encoded with base64 encoding.[m
+[31m-    [m
+[31m-    mimetype: application/x-microsoft.net.object.soap.base64[m
+[31m-    value   : The object must be serialized with [m
+[31m-            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter[m
+[31m-            : and then encoded with base64 encoding.[m
+[31m-[m
+[31m-    mimetype: application/x-microsoft.net.object.bytearray.base64[m
+[31m-    value   : The object must be serialized into a byte array [m
+[31m-            : using a System.ComponentModel.TypeConverter[m
+[31m-            : and then encoded with base64 encoding.[m
+[31m-    -->[m
+[31m-  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">[m
+[31m-    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />[m
+[31m-    <xsd:element name="root" msdata:IsDataSet="true">[m
+[31m-      <xsd:complexType>[m
+[31m-        <xsd:choice maxOccurs="unbounded">[m
+[31m-          <xsd:element name="metadata">[m
+[31m-            <xsd:complexType>[m
+[31m-              <xsd:sequence>[m
+[31m-                <xsd:element name="value" type="xsd:string" minOccurs="0" />[m
+[31m-              </xsd:sequence>[m
+[31m-              <xsd:attribute name="name" use="required" type="xsd:string" />[m
+[31m-              <xsd:attribute name="type" type="xsd:string" />[m
+[31m-              <xsd:attribute name="mimetype" type="xsd:string" />[m
+[31m-              <xsd:attribute ref="xml:space" />[m
+[31m-            </xsd:complexType>[m
+[31m-          </xsd:element>[m
+[31m-          <xsd:element name="assembly">[m
+[31m-            <xsd:complexType>[m
+[31m-              <xsd:attribute name="alias" type="xsd:string" />[m
+[31m-              <xsd:attribute name="name" type="xsd:string" />[m
+[31m-            </xsd:complexType>[m
+[31m-          </xsd:element>[m
+[31m-          <xsd:element name="data">[m
+[31m-            <xsd:complexType>[m
+[31m-              <xsd:sequence>[m
+[31m-                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />[m
+[31m-                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />[m
+[31m-              </xsd:sequence>[m
+[31m-              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />[m
+[31m-              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />[m
+[31m-              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />[m
+[31m-              <xsd:attribute ref="xml:space" />[m
+[31m-            </xsd:complexType>[m
+[31m-          </xsd:element>[m
+[31m-          <xsd:element name="resheader">[m
+[31m-            <xsd:complexType>[m
+[31m-              <xsd:sequence>[m
+[31m-                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />[m
+[31m-              </xsd:sequence>[m
+[31m-              <xsd:attribute name="name" type="xsd:string" use="required" />[m
+[31m-            </xsd:complexType>[m
+[31m-          </xsd:element>[m
+[31m-        </xsd:choice>[m
+[31m-      </xsd:complexType>[m
+[31m-    </xsd:element>[m
+[31m-  </xsd:schema>[m
+[31m-  <resheader name="resmimetype">[m
+[31m-    <value>text/microsoft-resx</value>[m
+[31m-  </resheader>[m
+[31m-  <resheader name="version">[m
+[31m-    <value>2.0</value>[m
+[31m-  </resheader>[m
+[31m-  <resheader name="reader">[m
+[31m-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>[m
+[31m-  </resheader>[m
+[31m-  <resheader name="writer">[m
+[31m-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>[m
+[31m-  </resheader>[m
+[31m-  <data name="CadenaConexion" xml:space="preserve">[m
+[31m-    <value>Data Source=LAUTAROATAMPIZ;Initial Catalog=Facturas;Integrated Security=True</value>[m
+[31m-  </data>[m
+[31m-</root>[m
+\ No newline at end of file[m
+[1mdiff --git a/U1 - Problema 5/U1 - Problema 5.csproj b/U1 - Problema 5/U1 - Problema 5.csproj[m
+[1mdeleted file mode 100644[m
+[1mindex 37281a6..0000000[m
+[1m--- a/U1 - Problema 5/U1 - Problema 5.csproj[m	
+[1m+++ /dev/null[m
+[36m@@ -1,34 +0,0 @@[m
+[31m-﻿<Project Sdk="Microsoft.NET.Sdk">[m
+[31m-[m
+[31m-  <PropertyGroup>[m
+[31m-    <OutputType>Exe</OutputType>[m
+[31m-    <TargetFramework>net8.0</TargetFramework>[m
+[31m-    <RootNamespace>U1___Problema_5</RootNamespace>[m
+[31m-    <ImplicitUsings>enable</ImplicitUsings>[m
+[31m-    <Nullable>enable</Nullable>[m
+[31m-  </PropertyGroup>[m
+[31m-[m
+[31m-  <ItemGroup>[m
+[31m-    <Folder Include="Datos\" />[m
+[31m-  </ItemGroup>[m
+[31m-[m
+[31m-  <ItemGroup>[m
+[31m-    <PackageReference Include="System.Data.SqlClient" Version="4.8.6" />[m
+[31m-  </ItemGroup>[m
+[31m-[m
+[31m-  <ItemGroup>[m
+[31m-    <Compile Update="Properties\Resources.Designer.cs">[m
+[31m-      <DesignTime>True</DesignTime>[m
+[31m-      <AutoGen>True</AutoGen>[m
+[31m-      <DependentUpon>Resources.resx</DependentUpon>[m
+[31m-    </Compile>[m
+[31m-  </ItemGroup>[m
+[31m-[m
+[31m-  <ItemGroup>[m
+[31m-    <EmbeddedResource Update="Properties\Resources.resx">[m
+[31m-      <Generator>ResXFileCodeGenerator</Generator>[m
+[31m-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>[m
+[31m-    </EmbeddedResource>[m
+[31m-  </ItemGroup>[m
+[31m-[m
+[31m-</Project>[m
+
+[33mcommit 731f5e0f1b7a0e772e76d21e3606e50f09982c22[m
+Author: LauAtam <lautaroatampiz@gmail.com>
+Date:   Thu Sep 5 14:09:52 2024 -0300
+
+    No se que poner pero no cambie nada importante
+
+[1mdiff --git a/U1 - Problema 5 v2/Datos/DBHelper.cs b/U1 - Problema 5 v2/Datos/DBHelper.cs[m
+[1mindex d7e651d..f49ceb0 100644[m
+[1m--- a/U1 - Problema 5 v2/Datos/DBHelper.cs[m	
+[1m+++ b/U1 - Problema 5 v2/Datos/DBHelper.cs[m	
+[36m@@ -1,11 +1,5 @@[m
+[31m-﻿using System;[m
+[31m-using System.Collections.Generic;[m
+[31m-using System.Data;[m
+[32m+[m[32m﻿using System.Data;[m
+ using System.Data.SqlClient;[m
+[31m-using System.Diagnostics.CodeAnalysis;[m
+[31m-using System.Linq;[m
+[31m-using System.Text;[m
+[31m-using System.Threading.Tasks;[m
+ using U1___Problema_5_v2.Properties;[m
+ [m
+ namespace U1___Problema_5_v2.Datos[m
+[36m@@ -14,6 +8,7 @@[m [mnamespace U1___Problema_5_v2.Datos[m
+     {[m
+         private static DBHelper _instancia = null;[m
+         private SqlConnection _conexion;[m
+[32m+[m
+         private DBHelper()[m
+         {[m
+             _conexion = new SqlConnection(Resources.cadenaDeConexion);[m
+[36m@@ -31,21 +26,19 @@[m [mnamespace U1___Problema_5_v2.Datos[m
+         /// Metodo para ejecutar consultas en la base de datos mediante[m
+         /// stored procedures con una lista de ParametroSQL[m
+         /// </summary>[m
+[31m-        /// <param name="spName"></param>[m
+[31m-        /// <param name="parametros"></param>[m
+[32m+[m[32m        /// <param name="spName">Nombre del procedimiento almacenado</param>[m
+[32m+[m[32m        /// <param name="parametros">Lista de objetos ParametroSQL(string Nombre, object Valor)</param>[m
+         /// <returns>Tabla resultante de la consulta</returns>[m
+         public DataTable? EjecutarSP(string spName, List<ParametroSQL>? parametros = null)[m
+         {[m
+             DataTable table = new DataTable();[m
+[32m+[m
+[32m+[m
+             SqlCommand comandoSql = new SqlCommand(spName, _conexion);[m
+             comandoSql.CommandType = CommandType.StoredProcedure;[m
+             if (parametros != null)[m
+[31m-            {[m
+                 foreach (ParametroSQL parametro in parametros)[m
+[31m-                {[m
+                     comandoSql.Parameters.Add(new SqlParameter(parametro.Nombre, parametro.Valor));[m
+[31m-                }[m
+[31m-            }[m
+             try[m
+             {[m
+                 using (_conexion)[m
+[36m@@ -70,8 +63,8 @@[m [mnamespace U1___Problema_5_v2.Datos[m
+         /// <summary>[m
+         /// Metodo para ejecutar consultas de tipo Data Modification Language[m
+         /// </summary>[m
+[31m-        /// <param name="spName"></param>[m
+[31m-        /// <param name="parametros"></param>[m
+[32m+[m[32m        /// <param name="spName">Nombre del procedimiento almacenado</param>[m
+[32m+[m[32m        /// <param name="parametros">Lista de objetos ParametroSQL(string Nombre, object Valor)</param>[m
+         /// <returns>Cantidad de filas afectadas</returns>[m
+         public int EjecutarSPDML(string spName, List<ParametroSQL>? parametros = null)[m
+         {[m
+[1mdiff --git a/U1 - Problema 5 v2/Datos/Repositories/ArticuloRepository.cs b/U1 - Problema 5 v2/Datos/Repositories/ArticuloRepository.cs[m
+[1mindex c713405..d51f838 100644[m
+[1m--- a/U1 - Problema 5 v2/Datos/Repositories/ArticuloRepository.cs[m	
+[1m+++ b/U1 - Problema 5 v2/Datos/Repositories/ArticuloRepository.cs[m	
+[36m@@ -1,5 +1,6 @@[m
+ ﻿using System;[m
+ using System.Collections.Generic;[m
+[32m+[m[32musing System.Data.SqlClient;[m
+ using System.Linq;[m
+ using System.Text;[m
+ using System.Threading.Tasks;[m
+[36m@@ -9,6 +10,10 @@[m [mnamespace U1___Problema_5_v2.Datos.Repositories[m
+ {[m
+     internal class ArticuloRepository : Repository<Articulo>[m
+     {[m
+[32m+[m[32m        public ArticuloRepository(): base()[m
+[32m+[m[32m        {[m
+[32m+[m
+[32m+[m[32m        }[m
+         public override bool Delete(int id)[m
+         {[m
+             throw new NotImplementedException();[m
+[1mdiff --git a/U1 - Problema 5 v2/Datos/Repositories/DetalleFacturaRepository.cs b/U1 - Problema 5 v2/Datos/Repositories/DetalleFacturaRepository.cs[m
+[1mindex f13779d..424b95c 100644[m
+[1m--- a/U1 - Problema 5 v2/Datos/Repositories/DetalleFacturaRepository.cs[m	
+[1m+++ b/U1 - Problema 5 v2/Datos/Repositories/DetalleFacturaRepository.cs[m	
+[36m@@ -9,6 +9,10 @@[m [mnamespace U1___Problema_5_v2.Datos.Repositories[m
+ {[m
+     internal class DetalleFacturaRepository : Repository<DetalleFactura>[m
+     {[m
+[32m+[m[32m        public DetalleFacturaRepository() : base()[m
+[32m+[m[32m        {[m
+[32m+[m[41m            [m
+[32m+[m[32m        }[m
+         public override bool Delete(int id)[m
+         {[m
+             throw new NotImplementedException();[m
+[1mdiff --git a/U1 - Problema 5 v2/Datos/Repositories/FacturaRepository.cs b/U1 - Problema 5 v2/Datos/Repositories/FacturaRepository.cs[m
+[1mindex dc1f213..1fa916e 100644[m
+[1m--- a/U1 - Problema 5 v2/Datos/Repositories/FacturaRepository.cs[m	
+[1m+++ b/U1 - Problema 5 v2/Datos/Repositories/FacturaRepository.cs[m	
+[36m@@ -8,10 +8,18 @@[m [musing U1___Problema_5_v2.Dominio;[m
+ namespace U1___Problema_5_v2.Datos.Repositories[m
+ {[m
+     internal class FacturaRepository : Repository<Factura>[m
+[31m-    {[m
+[32m+[m[32m    {[m[41m [m
+[32m+[m[32m        public FacturaRepository() : base()[m
+[32m+[m[32m        {[m
+[32m+[m[41m            [m
+[32m+[m[32m        }[m
+         public override bool Delete(int id)[m
+         {[m
+[31m-            throw new NotImplementedException();[m
+[32m+[m[32m            string spName = "SP_ELIMINAR_FACTURA";[m
+[32m+[m[32m            int lineas = 0;[m
+[32m+[m[32m            _parametros.Add(new ParametroSQL("@id", id));[m
+[32m+[m[32m            lineas = _helper.EjecutarSPDML(spName, _parametros);[m
+[32m+[m[32m            return lineas == 1;[m
+         }[m
+ [m
+         public override List<Factura> GetAll()[m
+[1mdiff --git a/U1 - Problema 5 v2/Datos/Repositories/FormaPagoRepository.cs b/U1 - Problema 5 v2/Datos/Repositories/FormaPagoRepository.cs[m
+[1mindex f4fc622..9e7ab60 100644[m
+[1m--- a/U1 - Problema 5 v2/Datos/Repositories/FormaPagoRepository.cs[m	
+[1m+++ b/U1 - Problema 5 v2/Datos/Repositories/FormaPagoRepository.cs[m	
+[36m@@ -9,6 +9,10 @@[m [mnamespace U1___Problema_5_v2.Datos.Repositories[m
+ {[m
+     internal class FormaPagoRepository : Repository<FormaPago>[m
+     {[m
+[32m+[m[32m        public FormaPagoRepository() : base()[m
+[32m+[m[32m        {[m
+[32m+[m[41m            [m
+[32m+[m[32m        }[m
+         public override bool Delete(int id)[m
+         {[m
+             throw new NotImplementedException();[m
+[1mdiff --git a/U1 - Problema 5 v2/Datos/Repositories/IRepository.cs b/U1 - Problema 5 v2/Datos/Repositories/IRepository.cs[m
+[1mindex 694e710..d5304c5 100644[m
+[1m--- a/U1 - Problema 5 v2/Datos/Repositories/IRepository.cs[m	
+[1m+++ b/U1 - Problema 5 v2/Datos/Repositories/IRepository.cs[m	
+[36m@@ -6,11 +6,11 @@[m [musing System.Threading.Tasks;[m
+ [m
+ namespace U1___Problema_5_v2.Datos.Repositories[m
+ {[m
+[31m-    public interface IRepository<T>[m
+[32m+[m[32m    public interface IRepository<TObject>[m
+     {[m
+[31m-        List<T> GetAll();[m
+[31m-        T GetByID(int id);[m
+[31m-        bool Save(T o);[m
+[32m+[m[32m        List<TObject> GetAll();[m
+[32m+[m[32m        TObject GetByID(int id);[m
+[32m+[m[32m        bool Save(TObject o);[m
+         bool Delete(int id);[m
+ [m
+     }[m
+[1mdiff --git a/U1 - Problema 5 v2/Datos/Repositories/Repository.cs b/U1 - Problema 5 v2/Datos/Repositories/Repository.cs[m
+[1mindex dfa468d..4c8a1e7 100644[m
+[1m--- a/U1 - Problema 5 v2/Datos/Repositories/Repository.cs[m	
+[1m+++ b/U1 - Problema 5 v2/Datos/Repositories/Repository.cs[m	
+[36m@@ -8,16 +8,17 @@[m [musing System.Xml.Schema;[m
+ [m
+ namespace U1___Problema_5_v2.Datos.Repositories[m
+ {[m
+[31m-    abstract class Repository<T> : IRepository<T>[m
+[32m+[m[32m    abstract class Repository<TObject> : IRepository<TObject>[m
+     {[m
+         protected DBHelper _helper;[m
+[32m+[m[32m        protected List<ParametroSQL> _parametros;[m
+         public Repository()[m
+         {[m
+             _helper = DBHelper.ObtenerInstancia();[m
+         }[m
+         public abstract bool Delete(int id);[m
+[31m-        public abstract List<T> GetAll();[m
+[31m-        public abstract T GetByID(int id);[m
+[31m-        public abstract bool Save(T o);[m
+[32m+[m[32m        public abstract List<TObject> GetAll();[m
+[32m+[m[32m        public abstract TObject GetByID(int id);[m
+[32m+[m[32m        public abstract bool Save(TObject o);[m
+     }[m
+ }[m
+[1mdiff --git a/U1 - Problema 5 v2/Dominio/Articulo.cs b/U1 - Problema 5 v2/Dominio/Articulo.cs[m
+[1mindex 041aaa5..03e77f5 100644[m
+[1m--- a/U1 - Problema 5 v2/Dominio/Articulo.cs[m	
+[1m+++ b/U1 - Problema 5 v2/Dominio/Articulo.cs[m	
+[36m@@ -8,14 +8,14 @@[m [mnamespace U1___Problema_5_v2.Dominio[m
+ {[m
+     internal class Articulo[m
+     {[m
+[31m-        public int Id { get; set; }[m
+[31m-        public string Nombre { get; set; }[m
+[31m-        public float PrecioUnitario { get; set; }[m
+[32m+[m[32m        public int id { get; set; }[m
+[32m+[m[32m        public string nombre { get; set; }[m
+[32m+[m[32m        public float precioUnitario { get; set; }[m
+         public Articulo(int id, string nombre, float precioUnitario)[m
+         {[m
+[31m-            this.Id = id;[m
+[31m-            this.Nombre = nombre;[m
+[31m-            this.PrecioUnitario = precioUnitario;[m
+[32m+[m[32m            this.id = id;[m
+[32m+[m[32m            this.nombre = nombre;[m
+[32m+[m[32m            this.precioUnitario = precioUnitario;[m
+         }[m
+     }[m
+ }[m
+[1mdiff --git a/U1 - Problema 5 v2/Dominio/DetalleFactura.cs b/U1 - Problema 5 v2/Dominio/DetalleFactura.cs[m
+[1mindex 2549f83..cfbc3d6 100644[m
+[1m--- a/U1 - Problema 5 v2/Dominio/DetalleFactura.cs[m	
+[1m+++ b/U1 - Problema 5 v2/Dominio/DetalleFactura.cs[m	
+[36m@@ -6,11 +6,11 @@[m [musing System.Threading.Tasks;[m
+ [m
+ namespace U1___Problema_5_v2.Dominio[m
+ {[m
+[31m-    internal class DetalleFactura[m
+[32m+[m[32m    public class DetalleFactura[m
+     {[m
+[31m-        public int Id { get; set; }[m
+[31m-        public int IdFactura { get; set; }[m
+[31m-        public int IdArticulo { get; set; }[m
+[31m-        public int Cantidad { get; set; }[m
+[32m+[m[32m        public int id { get; set; }[m
+[32m+[m[32m        public int idFactura { get; set; }[m
+[32m+[m[32m        public int idArticulo { get; set; }[m
+[32m+[m[32m        public int cantidad { get; set; }[m
+     }[m
+ }[m
+[1mdiff --git a/U1 - Problema 5 v2/Dominio/Factura.cs b/U1 - Problema 5 v2/Dominio/Factura.cs[m
+[1mindex 7bc05f8..835900f 100644[m
+[1m--- a/U1 - Problema 5 v2/Dominio/Factura.cs[m	
+[1m+++ b/U1 - Problema 5 v2/Dominio/Factura.cs[m	
+[36m@@ -8,16 +8,18 @@[m [mnamespace U1___Problema_5_v2.Dominio[m
+ {[m
+     public class Factura[m
+     {[m
+[31m-        public int Id;[m
+[31m-        public DateTime Fecha;[m
+[31m-        public int IdFormaPago;[m
+[31m-        public string NombreCliente;[m
+[31m-        public Factura(int id, DateTime fecha, int idFormaPago, string nombreCliente)[m
+[32m+[m[32m        public int id { get; private set; }[m
+[32m+[m[32m        public DateTime fecha { get; private set; }[m
+[32m+[m[32m        public int idFormaPago { get; private set; }[m
+[32m+[m[32m        public string nombreCliente { get; private set; }[m
+[32m+[m[32m        public List<DetalleFactura> detalles { get; private set; }[m
+[32m+[m[32m        public Factura(int id, DateTime fecha, int idFormaPago, string nombreCliente, List<DetalleFactura> detalles)[m
+         {[m
+[31m-            this.Id = id;[m
+[31m-            this.Fecha = fecha;[m
+[31m-            this.IdFormaPago = idFormaPago;[m
+[31m-            this.NombreCliente = nombreCliente;[m
+[32m+[m[32m            this.id  = id;[m
+[32m+[m[32m            this.fecha = fecha;[m
+[32m+[m[32m            this.idFormaPago = idFormaPago;[m
+[32m+[m[32m            this.nombreCliente = nombreCliente;[m
+[32m+[m[32m            this.detalles = detalles;[m
+         }[m
+     }[m
+ }[m
+[1mdiff --git a/U1 - Problema 5 v2/Dominio/FormaPago.cs b/U1 - Problema 5 v2/Dominio/FormaPago.cs[m
+[1mindex 420eff5..f5f59aa 100644[m
+[1m--- a/U1 - Problema 5 v2/Dominio/FormaPago.cs[m	
+[1m+++ b/U1 - Problema 5 v2/Dominio/FormaPago.cs[m	
+[36m@@ -8,7 +8,7 @@[m [mnamespace U1___Problema_5_v2.Dominio[m
+ {[m
+     internal class FormaPago[m
+     {[m
+[31m-        public int Id { get; set; }[m
+[31m-        public string Nombre { get; set; }[m
+[32m+[m[32m        public int id { get; set; }[m
+[32m+[m[32m        public string nombre { get; set; }[m
+     }[m
+ }[m
+[1mdiff --git a/U1 - Problema 5 v2/Servicios/FacturaManager.cs b/U1 - Problema 5 v2/Servicios/FacturaManager.cs[m
+[1mnew file mode 100644[m
+[1mindex 0000000..5d6776b[m
+[1m--- /dev/null[m
+[1m+++ b/U1 - Problema 5 v2/Servicios/FacturaManager.cs[m	
+[36m@@ -0,0 +1,31 @@[m
+[32m+[m[32m﻿using System.Data.SqlClient;[m
+[32m+[m[32musing U1___Problema_5_v2.Datos.Repositories;[m
+[32m+[m[32musing U1___Problema_5_v2.Dominio;[m
+[32m+[m
+[32m+[m[32mnamespace U1___Problema_5_v2.Servicios[m
+[32m+[m[32m{[m
+[32m+[m[32m    public class FacturaManager[m
+[32m+[m[32m    {[m
+[32m+[m[32m        IRepository<Factura> _repository;[m
+[32m+[m[32m        public FacturaManager()[m
+[32m+[m[32m        {[m
+[32m+[m[32m            _repository = new FacturaRepository();[m
+[32m+[m[32m        }[m
+[32m+[m[32m        public List<Factura> GetFacturas()[m
+[32m+[m[32m        {[m
+[32m+[m[32m            throw new NotImplementedException();[m
+[32m+[m[32m        }[m
+[32m+[m[32m        public Factura GetFacturaById(int id)[m
+[32m+[m[32m        {[m
+[32m+[m[32m            throw new NotImplementedException();[m
+[32m+[m[32m        }[m
+[32m+[m[32m        public bool SaveFactura(Factura factura)[m
+[32m+[m[32m        {[m
+[32m+[m[32m            throw new NotImplementedException();[m
+[32m+[m[32m        }[m
+[32m+[m[32m        public bool DeleteFactura(int id)[m
+[32m+[m[32m        {[m
+[32m+[m[32m            throw new NotImplementedException();[m
+[32m+[m[32m        }[m
+[32m+[m[32m    }[m
+[32m+[m[32m}[m
+[1mdiff --git a/U1 - Problema 5 v2/Servicios/FacturacionServicios.cs b/U1 - Problema 5 v2/Servicios/FacturacionServicios.cs[m
+[1mdeleted file mode 100644[m
+[1mindex c8fa0c4..0000000[m
+[1m--- a/U1 - Problema 5 v2/Servicios/FacturacionServicios.cs[m	
+[1m+++ /dev/null[m
+[36m@@ -1,27 +0,0 @@[m
+[31m-﻿using System;[m
+[31m-using System.Collections.Generic;[m
+[31m-using System.Linq;[m
+[31m-using System.Text;[m
+[31m-using System.Threading.Tasks;[m
+[31m-using U1___Problema_5_v2.Datos.Repositories;[m
+[31m-using U1___Problema_5_v2.Dominio;[m
+[31m-[m
+[31m-namespace U1___Problema_5_v2.Servicios[m
+[31m-{[m
+[31m-    public static class FacturacionServicios[m
+[31m-    {[m
+[31m-        #region Articulo[m
+[31m-        [m
+[31m-        #endregion[m
+[31m-        #region DetalleFactura[m
+[31m-[m
+[31m-        #endregion[m
+[31m-        #region Factura[m
+[31m-[m
+[31m-        #endregion[m
+[31m-        #region FormaPago[m
+[31m-[m
+[31m-        #endregion[m
+[31m-[m
+[31m-    }[m
+[31m-}[m
+
+[33mcommit d51bca02a67ed5b712cb8b327b4e9f0e8c22e119[m
+Author: LauAtam <lautaroatampiz@gmail.com>
+Date:   Tue Sep 3 15:03:21 2024 -0300
+
+    para josesito
+
+[1mdiff --git a/U1 - Problema 5 v2/Datos/DAOs/DaoAbstracto.cs b/U1 - Problema 5 v2/Datos/DAOs/DaoAbstracto.cs[m
+[1mdeleted file mode 100644[m
+[1mindex ad4ae67..0000000[m
+[1m--- a/U1 - Problema 5 v2/Datos/DAOs/DaoAbstracto.cs[m	
+[1m+++ /dev/null[m
+[36m@@ -1,19 +0,0 @@[m
+[31m-﻿using System;[m
+[31m-using System.Collections.Generic;[m
+[31m-using System.Linq;[m
+[31m-using System.Text;[m
+[31m-using System.Threading.Tasks;[m
+[31m-using System.Xml.Schema;[m
+[31m-[m
+[31m-namespace U1___Problema_5_v2.Datos.Daos[m
+[31m-{[m
+[31m-    abstract class DaoAbstracto : IDAO[m
+[31m-    {[m
+[31m-        public DBHelper _helper = DBHelper.ObtenerInstancia();[m
+[31m-        public abstract bool DeleteByID(object o);[m
+[31m-        public abstract List<object> GetAll();[m
+[31m-        public abstract object GetByID(int id);[m
+[31m-        public abstract bool Insert(object o);[m
+[31m-        public abstract bool UpdateByID(object o);[m
+[31m-    }[m
+[31m-}[m
+[1mdiff --git a/U1 - Problema 5 v2/Datos/DAOs/IDAO.cs b/U1 - Problema 5 v2/Datos/DAOs/IDAO.cs[m
+[1mdeleted file mode 100644[m
+[1mindex 51c14a6..0000000[m
+[1m--- a/U1 - Problema 5 v2/Datos/DAOs/IDAO.cs[m	
+[1m+++ /dev/null[m
+[36m@@ -1,18 +0,0 @@[m
+[31m-﻿using System;[m
+[31m-using System.Collections.Generic;[m
+[31m-using System.Linq;[m
+[31m-using System.Text;[m
+[31m-using System.Threading.Tasks;[m
+[31m-[m
+[31m-namespace U1___Problema_5_v2.Datos.Daos[m
+[31m-{[m
+[31m-    public interface IDAO[m
+[31m-    {[m
+[31m-        public List<object> GetAll();[m
+[31m-        public object GetByID(int id);[m
+[31m-        public bool Insert(object o);[m
+[31m-        public bool UpdateByID(object o);[m
+[31m-        public bool DeleteByID(object o);[m
+[31m-[m
+[31m-    }[m
+[31m-}[m
+[1mdiff --git a/U1 - Problema 5 v2/Datos/DBHelper.cs b/U1 - Problema 5 v2/Datos/DBHelper.cs[m
+[1mindex 6db895c..d7e651d 100644[m
+[1m--- a/U1 - Problema 5 v2/Datos/DBHelper.cs[m	
+[1m+++ b/U1 - Problema 5 v2/Datos/DBHelper.cs[m	
+[36m@@ -6,6 +6,7 @@[m [musing System.Diagnostics.CodeAnalysis;[m
+ using System.Linq;[m
+ using System.Text;[m
+ using System.Threading.Tasks;[m
+[32m+[m[32musing U1___Problema_5_v2.Properties;[m
+ [m
+ namespace U1___Problema_5_v2.Datos[m
+ {[m
+[36m@@ -15,7 +16,7 @@[m [mnamespace U1___Problema_5_v2.Datos[m
+         private SqlConnection _conexion;[m
+         private DBHelper()[m
+         {[m
+[31m-            _conexion = new SqlConnection("Data Source=lautaroatampiz;Initial Catalog=Facturas_v2;Integrated Security=True");[m
+[32m+[m[32m            _conexion = new SqlConnection(Resources.cadenaDeConexion);[m
+         }[m
+ [m
+         public static DBHelper ObtenerInstancia()[m
+[36m@@ -33,7 +34,7 @@[m [mnamespace U1___Problema_5_v2.Datos[m
+         /// <param name="spName"></param>[m
+         /// <param name="parametros"></param>[m
+         /// <returns>Tabla resultante de la consulta</returns>[m
+[31m-        public DataTable? EjecutarSP(string spName, List<ParametroSQL>? parametros)[m
+[32m+[m[32m        public DataTable? EjecutarSP(string spName, List<ParametroSQL>? parametros = null)[m
+         {[m
+             DataTable table = new DataTable();[m
+             SqlCommand comandoSql = new SqlCommand(spName, _conexion);[m
+[36m@@ -72,7 +73,7 @@[m [mnamespace U1___Problema_5_v2.Datos[m
+         /// <param name="spName"></param>[m
+         /// <param name="parametros"></param>[m
+         /// <returns>Cantidad de filas afectadas</returns>[m
+[31m-        public int EjecutarSPDML(string spName, List<ParametroSQL>? parametros)[m
+[32m+[m[32m        public int EjecutarSPDML(string spName, List<ParametroSQL>? parametros = null)[m
+         {[m
+             int filas = 0;[m
+             SqlCommand comando = new SqlCommand(spName, _conexion);[m
+[1mdiff --git a/U1 - Problema 5 v2/Datos/Repositories/ArticuloRepos
