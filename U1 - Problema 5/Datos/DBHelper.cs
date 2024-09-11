@@ -112,7 +112,7 @@ namespace U1___Problema_5.Datos
         public bool EjecutarSPDMLMaestroDetalles(string spMaestro, string spDetalle, List<SqlParameter>? paramsMaestro = null, List<List<SqlParameter>>? paramsDetalles = null)
         {
             bool resultado = false;
-            int idMaestro;
+            int idMaestro, contadorDetalles = 0;
             _conexion.Open();
             SqlTransaction transaccion = _conexion.BeginTransaction();
             #region Maestro
@@ -157,6 +157,7 @@ namespace U1___Problema_5.Datos
                 {
                     foreach (List<SqlParameter> detalle in paramsDetalles)
                     {
+                        contadorDetalles++;
                         cmdDetalle.Parameters.Clear();
                         cmdDetalle.Parameters.Add(new SqlParameter("@id_maestro", idMaestro));
                         if (detalle != null)
