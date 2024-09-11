@@ -42,7 +42,7 @@ namespace U1___Problema_5.Datos.Repositorios
                     new SqlParameter("@cantidad", detalle.Cantidad)
                 });
             }
-            return _helper.EjecutarSPDMLMaestroDetalles(spMaestro, spDetalle, maestro, detalles);
+            return _helper.ConsultaSPDMLMaestroDetalle(spMaestro, spDetalle, maestro, detalles);
         }
 
         public override Factura ObtenerPorId(int id)

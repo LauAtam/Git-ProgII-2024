@@ -25,7 +25,7 @@ namespace U1___Problema_5
             Factura factura1 = new Factura()
             {
                 FormaPago = efectivo,
-                NombreCliente = "Lautaro Atampiz",
+                NombreCliente = "Prueba cambios DBHelper",
                 Detalles = new List<DetalleFactura>()
                 {
                     new DetalleFactura() { Articulo = lapicera, Cantidad = 1 },
@@ -33,9 +33,6 @@ namespace U1___Problema_5
                     new DetalleFactura() { Articulo = pañuelitosDescartables, Cantidad = 1 }
                 }
             };
-            /*factura1.Detalles.Add(new DetalleFactura() { Articulo = lapicera, Cantidad = 1 });
-            factura1.Detalles.Add(new DetalleFactura() { Articulo = goma, Cantidad = 1 });
-            factura1.Detalles.Add(new DetalleFactura() { Articulo = pañuelitosDescartables, Cantidad = 1 });*/
             #endregion
 
             string mensaje = facturaManager.GuardarFactura(factura1) ? "Insercion exitosa" : "Ha ocurrido un error";
