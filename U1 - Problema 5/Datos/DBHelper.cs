@@ -12,7 +12,7 @@ namespace U1___Problema_5.Datos
 {
     public class DBHelper
     {
-        private DBHelper _instancia = null;
+        private static DBHelper _instancia = null;
         private SqlConnection _conexion;
 
         private DBHelper()
@@ -20,7 +20,7 @@ namespace U1___Problema_5.Datos
             _conexion = new SqlConnection(Resources.cadenaDeConexion);
         }
 
-        public DBHelper ObtenerInstancia()
+        public static DBHelper ObtenerInstancia()
         {
             if (_instancia == null)
             {
@@ -112,37 +112,85 @@ namespace U1___Problema_5.Datos
         public bool EjecutarSPDMLMaestroDetalles(string spMaestro, string spDetalle, List<SqlParameter>? paramsMaestro = null, List<List<SqlParameter>>? paramsDetalles = null)
         {
             bool resultado = false;
-            int idMaestro = 0;
+            int idMaestro;
             _conexion.Open();
             SqlTransaction transaccion = _conexion.BeginTransaction();
+            #region Maestro
             SqlCommand cmdMaestro = new SqlCommand()
             {
                 CommandText = spMaestro,
                 Connection = _conexion,
                 Transaction = transaccion,
-                CommandType = CommandType.StoredProcedure,       
+                CommandType = CommandType.StoredProcedure,
             };
-            SqlParameter paramOutput = new SqlParameter() { ParameterName = "@id_factura", Direction = ParameterDirection.Output};
+            SqlParameter paramOutput = new SqlParameter("@id_maestro", SqlDbType.Int)
+            {
+                Direction = ParameterDirection.Output
+            };
             cmdMaestro.Parameters.Add(paramOutput);
             if (paramsMaestro != null)
             {
                 cmdMaestro.Parameters.AddRange(paramsMaestro.ToArray());
             }
-            List<SqlCommand> cmdDetalles = new List<SqlCommand>();
-                /*CommandText = spDetalle,
+            #endregion
+            #region Detalle
+            SqlCommand cmdDetalle = new SqlCommand()
+            {
+                CommandText = spDetalle,
                 Connection = _conexion,
                 Transaction = transaccion,
-                CommandType = CommandType.StoredProcedure,*/
+                CommandType = CommandType.StoredProcedure
+            };
+            #endregion
             try
             {
-                cmdMaestro.ExecuteNonQuery();
-                idMaestro = (int)(paramOutput.Value);
-
+                try
+                {
+                    cmdMaestro.ExecuteNonQuery();
+                    idMaestro = (int)paramOutput.Value;
+                }
+                catch (Exception exMaestro)
+                {
+                    throw new Exception($"Excepcion ejecutando SP maestro: {spMaestro}.\n{exMaestro.Message}");
+                }
+                try
+                {
+                    foreach (List<SqlParameter> detalle in paramsDetalles)
+                    {
+                        cmdDetalle.Parameters.Clear();
+                        cmdDetalle.Parameters.Add(new SqlParameter("@id_maestro", idMaestro));
+                        if (detalle != null)
+                        {
+                            cmdDetalle.Parameters.AddRange(detalle.ToArray());
+                        }
+                        cmdDetalle.ExecuteNonQuery();
+                    }
+                }
+                catch (Exception exDetalle)
+                {
+                    throw new Exception($"Excepcion ejecutando SP detalle: {spMaestro}.\n{exDetalle.Message}");
+                }
+                transaccion.Commit();
+                resultado = true;
             }
             catch (Exception ex)
             {
-                //Console.WriteLine($"Error ejecutando SP \"{spName}\" en: DBHelper.EjecutarSPDMLMaestroDetalle.\nMensaje de error: {ex.Message}");
-                throw;
+                Console.WriteLine(ex.Message);
+                try
+                {
+                    transaccion.Rollback();
+                }
+                catch (Exception exTransaccion)
+                {
+                    Console.WriteLine($"Error en el rollback de la transaccion en EjecutarSPDMLMaestroDetalles.\n{exTransaccion.Message}");
+                }
+            }
+            finally
+            {
+                if (_conexion.State == ConnectionState.Open)
+                {
+                    _conexion.Close();
+                }
             }
             return resultado;
         }
