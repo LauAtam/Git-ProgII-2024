@@ -13,7 +13,7 @@ namespace U1___Problema_5.Datos.Repositorios
         {
             _helper = DBHelper.ObtenerInstancia();
         }
-        public abstract bool Eliminar(int id);
+        public abstract bool Eliminar(TObject o);
         public abstract List<TObject> ObtenerTodos();
         public abstract TObject ObtenerPorId(int id);
         public abstract bool Guardar(TObject o);

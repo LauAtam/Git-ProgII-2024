@@ -47,26 +47,26 @@ namespace U1___Problema_5.Datos
             {
                 cmd.Parameters.AddRange(parametros.ToArray());
             }
-            using (_conexion)
+            //using (_conexion)
+            //{
+            try
             {
-                try
+                _conexion.Open();
+                datatable.Load(cmd.ExecuteReader());
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error ejecutando SP \"{spName}\" en: DBHelper.EjecutarSP.\nMensaje de error: {ex.Message}");
+                datatable = null;
+            }
+            finally
+            {
+                if (_conexion.State == ConnectionState.Open)
                 {
-                    _conexion.Open();
-                    datatable.Load(cmd.ExecuteReader());
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine($"Error ejecutando SP \"{spName}\" en: DBHelper.EjecutarSP.\nMensaje de error: {ex.Message}");
-                    datatable = null;
-                }
-                finally
-                {
-                    if (_conexion.State == ConnectionState.Open)
-                    {
-                        _conexion.Close();
-                    }
+                    _conexion.Close();
                 }
             }
+            //}
             return datatable;
         }
 
@@ -87,35 +87,36 @@ namespace U1___Problema_5.Datos
             {
                 cmd.Parameters.AddRange(parametros.ToArray());
             }
-            using (_conexion)
+            //using (_conexion)
+            //{
+            _conexion.Open();
+            SqlTransaction transaccion = _conexion.BeginTransaction();
+            try
             {
+                cmd.Transaction = transaccion;
+                filas = cmd.ExecuteNonQuery();
+                transaccion.Commit();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error ejecutando SP \"{spName}\" en: DBHelper.EjecutarSPDML.\nMensaje de error: {ex.Message}");
+                filas = 0;
                 try
                 {
-                    _conexion.Open();
-                    cmd.Transaction = _conexion.BeginTransaction();
-                    filas = cmd.ExecuteNonQuery();
-                    cmd.Transaction.Commit();
+                    transaccion.Rollback();
                 }
-                catch (Exception ex)
+                catch (Exception exRollback)
                 {
-                    Console.WriteLine($"Error ejecutando SP \"{spName}\" en: DBHelper.EjecutarSPDML.\nMensaje de error: {ex.Message}");
-                    filas = 0;
-                    try
-                    {
-                        cmd.Transaction.Rollback();
-                    }
-                    catch (Exception exRollback)
-                    {
-                        Console.WriteLine(exRollback.Message);
-                    }
+                    Console.WriteLine(exRollback.Message);
                 }
-                finally
+            }
+            finally
+            {
+                if (_conexion.State == ConnectionState.Open)
                 {
-                    if (_conexion.State == ConnectionState.Open)
-                    {
-                        _conexion.Close();
-                    }
+                    _conexion.Close();
                 }
+                //}
             }
             return filas;
         }
@@ -123,86 +124,89 @@ namespace U1___Problema_5.Datos
         public bool ConsultaSPDMLMaestroDetalle(string spMaestro, string spDetalle, List<SqlParameter>? paramsMaestro = null, List<List<SqlParameter>>? paramsDetalles = null)
         {
             bool resultado = false;
-            using (_conexion)
+            /*using (_conexion)
+            {*/
+            _conexion.Open();
+            /*using (SqlTransaction transaccion = _conexion.BeginTransaction())
+            {*/
+            SqlTransaction transaccion = _conexion.BeginTransaction();
+            try
             {
-                _conexion.Open();
-                using (SqlTransaction transaccion = _conexion.BeginTransaction())
+                //Ejecutar el SP del maestro que retorna el ultimo ID
+                int idMaestro = EjecutarSPDMLMaestro(_conexion, transaccion, spMaestro, paramsMaestro);
+                //Ejecutar el SP del detalle por cada detalle
+                EjecutarSPDMLDetalles(_conexion, transaccion, idMaestro, spDetalle, paramsDetalles);
+                transaccion.Commit();
+                resultado = true;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                try
                 {
-                    try
-                    {
-                        //Ejecutar el SP del maestro que retorna el ultimo ID
-                        int idMaestro = EjecutarSPDMLMaestro(_conexion, transaccion, spMaestro, paramsMaestro);
-                        //Ejecutar el SP del detalle por cada detalle
-                        EjecutarSPDMLDetalles(_conexion, transaccion, idMaestro, spDetalle, paramsDetalles);
-                        transaccion.Commit();
-                        resultado = true;
-                    }
-                    catch (Exception ex)
-                    {
-                        Console.WriteLine(ex.Message);
-                        try
-                        {
-                            transaccion.Rollback();
-                        }
-                        catch (Exception exTransaccion)
-                        {
-                            Console.WriteLine($"Error en el rollback de la transaccion.\n{exTransaccion.Message}");
-                        }
-                    }
-                    finally
-                    {
-                        if (_conexion.State == ConnectionState.Open)
-                        {
-                            _conexion.Close();
-                        }
-                    }
+                    transaccion.Rollback();
+                }
+                catch (Exception exTransaccion)
+                {
+                    Console.WriteLine($"Error en el rollback de la transaccion.\n{exTransaccion.Message}");
                 }
             }
+            finally
+            {
+                if (_conexion.State == ConnectionState.Open)
+                {
+                    _conexion.Close();
+                }
+            }
+            //}
+            //}
             return resultado;
         }
 
         private int EjecutarSPDMLMaestro(SqlConnection conexion, SqlTransaction transaccion, string spMaestro, List<SqlParameter>? paramsMaestro)
         {
-            using (SqlCommand cmdMaestro = new SqlCommand(spMaestro, conexion, transaccion))
+            /*using (SqlCommand cmdMaestro = new SqlCommand(spMaestro, conexion, transaccion))
+            {*/
+            SqlCommand cmdMaestro = new SqlCommand(spMaestro, conexion, transaccion);
+            cmdMaestro.CommandType = CommandType.StoredProcedure;
+
+            SqlParameter paramOutput = new SqlParameter("@id_maestro", SqlDbType.Int)
             {
-                cmdMaestro.CommandType = CommandType.StoredProcedure;
+                Direction = ParameterDirection.Output
+            };
+            cmdMaestro.Parameters.Add(paramOutput);
 
-                SqlParameter paramOutput = new SqlParameter("@id_maestro", SqlDbType.Int)
-                {
-                    Direction = ParameterDirection.Output
-                };
-                cmdMaestro.Parameters.Add(paramOutput);
-
-                if (paramsMaestro != null)
-                {
-                    cmdMaestro.Parameters.AddRange(paramsMaestro.ToArray());
-                }
-                cmdMaestro.ExecuteNonQuery();
-
-                if (paramOutput.Value == null)
-                {
-                    throw new Exception("El SP del maestro no devolvió un Id valido");
-                }
-                return (int)paramOutput.Value;
+            if (paramsMaestro != null)
+            {
+                cmdMaestro.Parameters.AddRange(paramsMaestro.ToArray());
             }
+            cmdMaestro.ExecuteNonQuery();
+
+            if (paramOutput.Value == null)
+            {
+                throw new Exception("El SP del maestro no devolvió un Id valido");
+            }
+            return (int)paramOutput.Value;
+            //}
         }
 
         private void EjecutarSPDMLDetalles(SqlConnection conexion, SqlTransaction transaccion, int idMaestro, string spDetalle, List<List<SqlParameter>>? paramsDetalles)
         {
-            using (SqlCommand cmdDetalle = new SqlCommand(spDetalle, conexion, transaccion))
+            //using (SqlCommand cmdDetalle = new SqlCommand(spDetalle, conexion, transaccion))
+            //{
+            SqlCommand cmdDetalle = new SqlCommand(spDetalle, conexion, transaccion);
+            cmdDetalle.CommandType = CommandType.StoredProcedure;
+            if (paramsDetalles != null)
             {
-                cmdDetalle.CommandType = CommandType.StoredProcedure;
-                if (paramsDetalles != null)
+                foreach (List<SqlParameter> detalle in paramsDetalles)
                 {
-                    foreach (List<SqlParameter> detalle in paramsDetalles)
-                    {
-                        cmdDetalle.Parameters.Clear();
-                        cmdDetalle.Parameters.Add(new SqlParameter("@id_maestro", idMaestro));
-                        cmdDetalle.Parameters.AddRange(detalle.ToArray());
-                        cmdDetalle.ExecuteNonQuery();
-                    }
+                    cmdDetalle.Parameters.Clear();
+                    cmdDetalle.Parameters.Add(new SqlParameter("@id_maestro", idMaestro));
+                    cmdDetalle.Parameters.AddRange(detalle.ToArray());
+                    cmdDetalle.ExecuteNonQuery();
                 }
             }
+            //}
         }
     }
 }

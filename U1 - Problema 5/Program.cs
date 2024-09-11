@@ -7,7 +7,8 @@ namespace U1___Problema_5
     {
         static void Main(string[] args)
         {
-            FacturaManager facturaManager = new FacturaManager();
+            Aplicacion.MenuPrincipal();
+            /*FacturaManager facturaManager = new FacturaManager();
             #region Articulos de ejemplo - TODO obtenerlos de la DB
             Articulo lapicera = new Articulo() { Id = 1, Nombre = "Lapicera", PrecioUnitario = 200.00f };
             Articulo goma = new Articulo() { Id = 2, Nombre = "Goma", PrecioUnitario = 50.00f };
@@ -37,6 +38,8 @@ namespace U1___Problema_5
 
             string mensaje = facturaManager.GuardarFactura(factura1) ? "Insercion exitosa" : "Ha ocurrido un error";
             Console.WriteLine(mensaje);
+            Console.ReadLine();
+            facturaManager.EliminarFacturaYDetalles(factura1);*/
         }
     }
 }

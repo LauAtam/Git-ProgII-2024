@@ -11,6 +11,6 @@ namespace U1___Problema_5.Datos.Repositorios
         List<TObject> ObtenerTodos();
         TObject ObtenerPorId(int id);
         bool Guardar(TObject o);
-        bool Eliminar(int id);
+        bool Eliminar(TObject o);
     }
 }

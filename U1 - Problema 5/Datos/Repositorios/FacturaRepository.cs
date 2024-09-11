@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 using U1___Problema_5_v2.Dominio;
@@ -14,11 +15,34 @@ namespace U1___Problema_5.Datos.Repositorios
         {
 
         }
-        public override bool Eliminar(int id)
+        /// <summary>
+        /// Elimina una factura por su atributo Id y todos los Detalles de la misma
+        /// </summary>
+        /// <param name="factura"></param>
+        /// <returns>Bool que representa si se eliminó algun registro</returns>
+        public override bool Eliminar(Factura factura)
         {
-            throw new NotImplementedException();
+            int lineas = 0;
+            foreach (DetalleFactura detalle in factura.Detalles)
+            {
+                List<SqlParameter> paramsDetalle = new List<SqlParameter>()
+                {
+                    new SqlParameter("@id", factura.Id)
+                };
+                lineas += _helper.EjecutarSPDML("SP_ELIMINAR_DETALLE_FACTURA", paramsDetalle);
+            }
+            List<SqlParameter> paramsFactura = new List<SqlParameter>()
+            {
+                new SqlParameter("@id", factura.Id)
+            };
+            lineas += _helper.EjecutarSPDML("SP_ELIMINAR_FACTURA", paramsFactura);
+            return lineas > 0;
         }
-
+        /// <summary>
+        /// Guarda en la base de datos la factura y sus detalles
+        /// </summary>
+        /// <param name="factura"></param>
+        /// <returns></returns>
         public override bool Guardar(Factura factura)
         {
             int contadorDetalles = 0;
