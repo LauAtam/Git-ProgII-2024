@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace U1___Problema_5.Datos.Repositorios
 {
-    abstract class Repository<TObject> : IRepository<TObject>
+    public abstract class Repository<TObject> : IRepository<TObject>
     {
-        private DBHelper _helper;
-        public Repository()
+        protected DBHelper _helper;
+        protected Repository()
         {
             _helper = DBHelper.ObtenerInstancia();
         }
