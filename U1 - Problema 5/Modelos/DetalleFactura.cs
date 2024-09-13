@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace U1___Problema_5_v2.Dominio
+namespace U1___Problema_5.Modelos
 {
     public class DetalleFactura
     {

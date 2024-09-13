@@ -1,12 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
+﻿using System.Data;
 using System.Data.SqlClient;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Transactions;
-using System.Xml.Linq;
 using U1___Problema_5.Properties;
 
 namespace U1___Problema_5.Datos
@@ -47,8 +40,6 @@ namespace U1___Problema_5.Datos
             {
                 cmd.Parameters.AddRange(parametros.ToArray());
             }
-            //using (_conexion)
-            //{
             try
             {
                 _conexion.Open();
@@ -56,7 +47,7 @@ namespace U1___Problema_5.Datos
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error ejecutando SP \"{spName}\" en: DBHelper.EjecutarSP.\nMensaje de error: {ex.Message}");
+                Console.WriteLine($"Error ejecutando SP \"{spName}\".\nMensaje de error: {ex.Message}");
                 datatable = null;
             }
             finally
@@ -66,7 +57,62 @@ namespace U1___Problema_5.Datos
                     _conexion.Close();
                 }
             }
-            //}
+            return datatable;
+        }
+        public DataTable? EjecutarSP(string spName, SqlParameter parametro = null)
+        {
+            DataTable? datatable = new DataTable();
+            SqlCommand cmd = new SqlCommand(spName, _conexion)
+            {
+                CommandType = CommandType.StoredProcedure
+            };
+            if (parametro != null)
+            {
+                cmd.Parameters.Add(parametro);
+            }
+            try
+            {
+                _conexion.Open();
+                datatable.Load(cmd.ExecuteReader());
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error ejecutando SP \"{spName}\".\nMensaje de error: {ex.Message}");
+                datatable = null;
+            }
+            finally
+            {
+                if (_conexion.State == ConnectionState.Open)
+                {
+                    _conexion.Close();
+                }
+            }
+            return datatable;
+        }
+        public DataTable? EjecutarSP(string spName)
+        {
+            DataTable? datatable = new DataTable();
+            SqlCommand cmd = new SqlCommand(spName, _conexion)
+            {
+                CommandType = CommandType.StoredProcedure
+            };
+            try
+            {
+                _conexion.Open();
+                datatable.Load(cmd.ExecuteReader());
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error ejecutando SP \"{spName}\".\nMensaje de error: {ex.Message}");
+                datatable = null;
+            }
+            finally
+            {
+                if (_conexion.State == ConnectionState.Open)
+                {
+                    _conexion.Close();
+                }
+            }
             return datatable;
         }
 
@@ -87,8 +133,6 @@ namespace U1___Problema_5.Datos
             {
                 cmd.Parameters.AddRange(parametros.ToArray());
             }
-            //using (_conexion)
-            //{
             _conexion.Open();
             SqlTransaction transaccion = _conexion.BeginTransaction();
             try
@@ -124,11 +168,7 @@ namespace U1___Problema_5.Datos
         public bool ConsultaSPDMLMaestroDetalle(string spMaestro, string spDetalle, List<SqlParameter>? paramsMaestro = null, List<List<SqlParameter>>? paramsDetalles = null)
         {
             bool resultado = false;
-            /*using (_conexion)
-            {*/
             _conexion.Open();
-            /*using (SqlTransaction transaccion = _conexion.BeginTransaction())
-            {*/
             SqlTransaction transaccion = _conexion.BeginTransaction();
             try
             {
@@ -163,6 +203,15 @@ namespace U1___Problema_5.Datos
             return resultado;
         }
 
+        /// <summary>
+        /// Metodo privado para la ejecucion de un query de tipo DML
+        /// </summary>
+        /// <param name="conexion">SqlConnection a la base de datos</param>
+        /// <param name="transaccion">SqlTransaction de la SqlConnection</param>
+        /// <param name="spMaestro">Stored Procedure del maestro</param>
+        /// <param name="paramsMaestro">Parametros que recibe el Stored Procedure para trabajar</param>
+        /// <returns>Id del maestro registrado</returns>
+        /// <exception cref="Exception"></exception>
         private int EjecutarSPDMLMaestro(SqlConnection conexion, SqlTransaction transaccion, string spMaestro, List<SqlParameter>? paramsMaestro)
         {
             /*using (SqlCommand cmdMaestro = new SqlCommand(spMaestro, conexion, transaccion))
@@ -190,6 +239,14 @@ namespace U1___Problema_5.Datos
             //}
         }
 
+        /// <summary>
+        /// Metodo privado para la ejecucion de un query de tipo DML que inserte registros que tengan una fk a una tabla maestro
+        /// </summary>
+        /// <param name="conexion">SqlConnection a la base de datos</param>
+        /// <param name="transaccion">SqlTransaction de la SqlConnection</param>
+        /// <param name="spDetalle">Stored Procedure DML de la tabla de detalles</param>
+        /// <param name="paramsDetalles">Parametros que recibe el Stored Procedure para trabajar</param>
+        /// <param name="idMaestro">Id del maestro al que pertenecen los detalles</param>
         private void EjecutarSPDMLDetalles(SqlConnection conexion, SqlTransaction transaccion, int idMaestro, string spDetalle, List<List<SqlParameter>>? paramsDetalles)
         {
             //using (SqlCommand cmdDetalle = new SqlCommand(spDetalle, conexion, transaccion))

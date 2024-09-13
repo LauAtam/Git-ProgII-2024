@@ -1,11 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http.Headers;
-using System.Text;
-using System.Threading.Tasks;
-using static System.Collections.Specialized.BitVector32;
-using U1___Problema_5_v2.Dominio;
+﻿using System.Text.Json;
+using U1___Problema_5.Modelos;
 
 namespace U1___Problema_5.Servicios
 {
@@ -38,11 +32,13 @@ namespace U1___Problema_5.Servicios
                         programa = false;
                         break;
                     default:
+                        Console.WriteLine("Debe ingresar una opcion válida");
                         break;
                 }
             }
         }
 
+        #region Menu Gestion Facturas
         private static void MenuFacturas()
         {
             FacturaManager facturaManager = new FacturaManager();
@@ -59,17 +55,42 @@ namespace U1___Problema_5.Servicios
                 switch (input)
                 {
                     case "1":
-                        Console.Write("Ingrese la cantidad de facturas que desea ver: ");
-                        input = Console.ReadLine();
-                        int n;
-                        int.TryParse(input, out n);
-                        facturaManager.ObtenerFacturas(n);
+                        List<Factura> facturas = facturaManager.ObtenerFacturas();
+                        //Console.WriteLine(JsonSerializer.Serialize()
+                        foreach (Factura f in facturas)
+                        {
+                            Console.WriteLine("##########################################################");
+                            Console.WriteLine(f.ToString());
+                        }
                         break;
                     case "2":
-                        facturaManager.GuardarFactura();
+                        Factura factura = new Factura()
+                        {
+                            Detalles = new List<DetalleFactura>()
+                        };
+                        Console.Write("Nombre del cliente: ");
+                        factura.NombreCliente = Console.ReadLine();
+                        //Console.Write("Forma de pago: ");
+                        factura.FormaPago = new FormaPago() { Id = 1, Nombre = "Efectivo" };
+                        bool agregarDetalle = true;
+                        while (agregarDetalle)
+                        {
+                            DetalleFactura detalle = new DetalleFactura();
+                            Console.Write("Ingrese el articulo: ");
+                            detalle.Articulo = new Articulo() { Id = 1 };
+
+                            Console.Write("Ingrese la cantidad del articulo: ");
+                            detalle.Cantidad = int.Parse(Console.ReadLine());
+
+                            factura.Detalles.Add(detalle);
+                            Console.WriteLine("Agregar otro detalle? y/n");
+                            input = Console.ReadLine().ToLower();
+                            agregarDetalle = input == "y" ? true : false;
+                        }
+                        facturaManager.GuardarFactura(factura);
                         break;
                     case "3":
-                        MenuFormasDePago();
+                        Console.WriteLine("Implementacion para eliminar una factura");
                         break;
                     case "4":
                         salir = true;
@@ -79,6 +100,7 @@ namespace U1___Problema_5.Servicios
                 }
             }
         }
+        #endregion
 
         private static void MenuArticulos()
         {
