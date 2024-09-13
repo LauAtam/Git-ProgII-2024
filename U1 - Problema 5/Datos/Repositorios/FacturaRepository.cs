@@ -1,19 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Data;
 using System.Data.SqlClient;
-using System.Linq;
-using System.Net.Http.Headers;
-using System.Text;
-using System.Threading.Tasks;
-using U1___Problema_5_v2.Dominio;
+using U1___Problema_5.Modelos;
 
 namespace U1___Problema_5.Datos.Repositorios
 {
     public class FacturaRepository : Repository<Factura>
     {
+        private IRepository<FormaPago> formaPagoRepository;
+        private DetalleFacturaRepository detalleFacturaRepository;
         public FacturaRepository() : base()
         {
-
+            formaPagoRepository = new FormaPagoRepository();
+            detalleFacturaRepository = new DetalleFacturaRepository();
         }
         /// <summary>
         /// Elimina una factura por su atributo Id y todos los Detalles de la misma
@@ -76,7 +74,24 @@ namespace U1___Problema_5.Datos.Repositorios
 
         public override List<Factura> ObtenerTodos()
         {
-            throw new NotImplementedException();
+            DataTable? dtFacturas = _helper.EjecutarSP("SP_RECUPERAR_FACTURAS");
+            List<Factura> lstFacturas = new List<Factura>();
+            if (dtFacturas != null && dtFacturas.Rows.Count > 0)
+            {
+                foreach (DataRow row in dtFacturas.Rows)
+                {
+                    Factura factura = new Factura()
+                    {
+                        Id = (int)row["id"],
+                        Fecha = (DateTime)row["fecha"],
+                        FormaPago = formaPagoRepository.ObtenerPorId((int)row["id_forma_pago"]),
+                        NombreCliente = (string)row["nombre_cliente"],
+                        Detalles = detalleFacturaRepository.ObtenerPorIdMaestro((int)row["id"])
+                    };
+                    lstFacturas.Add(factura);
+                }
+            }
+            return lstFacturas;
         }
     }
 }
