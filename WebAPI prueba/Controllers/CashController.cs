@@ -14,8 +14,8 @@ namespace WebAPI_prueba.Controllers
         {
             return Ok(Monedas);
         }
-        [HttpGet("{nombre}")]
-        public IActionResult GetVariable(string nombre)
+        [HttpGet("Monedas")]
+        public IActionResult GetMonedas([FromQuery]string nombre)
         {
             foreach (var moneda in Monedas)
             {

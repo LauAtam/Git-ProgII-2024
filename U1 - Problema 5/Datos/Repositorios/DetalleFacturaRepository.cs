@@ -6,11 +6,7 @@ namespace U1___Problema_5.Datos.Repositorios
 {
     public class DetalleFacturaRepository : Repository<DetalleFactura>
     {
-        private IRepository<Articulo> articuloRepository;
-        public DetalleFacturaRepository() : base()
-        {
-            articuloRepository = new ArticuloRepository();
-        }
+        private IRepository<Articulo> articuloRepository = new ArticuloRepository();
         public override bool Eliminar(DetalleFactura o)
         {
             throw new NotImplementedException();

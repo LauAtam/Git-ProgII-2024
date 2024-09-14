@@ -6,13 +6,9 @@ namespace U1___Problema_5.Datos.Repositorios
 {
     public class FacturaRepository : Repository<Factura>
     {
-        private IRepository<FormaPago> formaPagoRepository;
-        private DetalleFacturaRepository detalleFacturaRepository;
-        public FacturaRepository() : base()
-        {
-            formaPagoRepository = new FormaPagoRepository();
-            detalleFacturaRepository = new DetalleFacturaRepository();
-        }
+        private IRepository<FormaPago> formaPagoRepository = new FormaPagoRepository();
+        private DetalleFacturaRepository detalleFacturaRepository = new DetalleFacturaRepository();
+
         /// <summary>
         /// Elimina una factura por su atributo Id y todos los Detalles de la misma
         /// </summary>

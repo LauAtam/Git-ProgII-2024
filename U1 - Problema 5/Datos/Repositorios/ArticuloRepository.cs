@@ -39,7 +39,16 @@ namespace U1___Problema_5.Datos.Repositorios
 
         public override List<Articulo> ObtenerTodos()
         {
-            throw new NotImplementedException();
+            DataTable dtArticulos = _helper.EjecutarSP("SP_RECUPERAR_ARTICULOS");
+            List<Articulo> lstArticulos = new List<Articulo>();
+            if (dtArticulos != null && dtArticulos.Rows.Count > 0)
+            {
+                foreach (DataRow row in dtArticulos.Rows)
+                {
+                    lstArticulos.Add(new Articulo() { Id = (int)row["id"], Nombre = (string)row["nombre"], PrecioUnitario = (decimal)row["precio_unitario"] });
+                }
+            }
+            return lstArticulos;
         }
     }
 }

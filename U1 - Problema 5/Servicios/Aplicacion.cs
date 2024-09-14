@@ -64,30 +64,7 @@ namespace U1___Problema_5.Servicios
                         }
                         break;
                     case "2":
-                        Factura factura = new Factura()
-                        {
-                            Detalles = new List<DetalleFactura>()
-                        };
-                        Console.Write("Nombre del cliente: ");
-                        factura.NombreCliente = Console.ReadLine();
-                        //Console.Write("Forma de pago: ");
-                        factura.FormaPago = new FormaPago() { Id = 1, Nombre = "Efectivo" };
-                        bool agregarDetalle = true;
-                        while (agregarDetalle)
-                        {
-                            DetalleFactura detalle = new DetalleFactura();
-                            Console.Write("Ingrese el articulo: ");
-                            detalle.Articulo = new Articulo() { Id = 1 };
-
-                            Console.Write("Ingrese la cantidad del articulo: ");
-                            detalle.Cantidad = int.Parse(Console.ReadLine());
-
-                            factura.Detalles.Add(detalle);
-                            Console.WriteLine("Agregar otro detalle? y/n");
-                            input = Console.ReadLine().ToLower();
-                            agregarDetalle = input == "y" ? true : false;
-                        }
-                        facturaManager.GuardarFactura(factura);
+                        facturaManager.GuardarFactura();
                         break;
                     case "3":
                         Console.WriteLine("Implementacion para eliminar una factura");

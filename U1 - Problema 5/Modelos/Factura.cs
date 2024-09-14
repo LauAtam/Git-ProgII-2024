@@ -15,6 +15,10 @@ namespace U1___Problema_5.Modelos
         public FormaPago FormaPago { get; set; }
         public string NombreCliente { get; set; }
         public List<DetalleFactura> Detalles { get; set; }
+        public Factura()
+        {
+            Detalles = new List<DetalleFactura>();
+        }
         public override string ToString()
         {
             string cabecera =

@@ -6,10 +6,6 @@ namespace U1___Problema_5.Datos.Repositorios
 {
     public class FormaPagoRepository : Repository<FormaPago>
     {
-        public FormaPagoRepository() : base()
-        {
-
-        }
         public override bool Eliminar(FormaPago o)
         {
             throw new NotImplementedException();
@@ -37,7 +33,16 @@ namespace U1___Problema_5.Datos.Repositorios
 
         public override List<FormaPago> ObtenerTodos()
         {
-            throw new NotImplementedException();
+            DataTable dtFormasPago = _helper.EjecutarSP("SP_RECUPERAR_FORMAS_PAGO");
+            List<FormaPago> lstFormasPago = new List<FormaPago>();
+            if (dtFormasPago!= null && dtFormasPago.Rows.Count > 0)
+            {
+                foreach (DataRow row in dtFormasPago.Rows)
+                {
+                    lstFormasPago.Add(new FormaPago(){Id = (int)row["id"],Nombre = (string)row["nombre"]});
+                }
+            }
+            return lstFormasPago;
         }
     }
 }
