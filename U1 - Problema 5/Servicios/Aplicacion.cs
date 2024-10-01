@@ -47,7 +47,7 @@ namespace U1___Problema_5.Servicios
             {
                 Console.WriteLine(
                     "--Gestion de Facturas--\n" +
-                    "1-Mostrar ultimas n Facturas\n" +
+                    "1-Mostrar Facturas\n" +
                     "2-Cargar Nueva Factura\n" +
                     "3-Eliminar Factura\n" +
                     "4-Volver al menu principal\n");
@@ -55,21 +55,16 @@ namespace U1___Problema_5.Servicios
                 switch (input)
                 {
                     case "1":
-                        List<Factura> facturas = facturaManager.ObtenerFacturas();
-                        //Console.WriteLine(JsonSerializer.Serialize()
-                        foreach (Factura f in facturas)
-                        {
-                            Console.WriteLine("##########################################################");
-                            Console.WriteLine(f.ToString());
-                        }
+                        facturaManager.ObtenerFacturas();
                         break;
                     case "2":
                         facturaManager.GuardarFactura();
                         break;
                     case "3":
-                        Console.WriteLine("Implementacion para eliminar una factura");
+                        facturaManager.EliminarFactura();
                         break;
                     case "4":
+                        Console.WriteLine("Debe ingresar una opcion válida");
                         salir = true;
                         break;
                     default:

@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.10.35201.131
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "U1 - Problema 5", "U1 - Problema 5.csproj", "{07445E9B-6AF9-4742-99F7-C1E3D22A6F0C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "U1 - Problema 5", "U1 - Problema 5.csproj", "{07445E9B-6AF9-4742-99F7-C1E3D22A6F0C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ArticulosWebApi", "ArticulosWebApi\ArticulosWebApi.csproj", "{3459C37D-A2B1-4238-8F70-7A22B5BA5BEC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{07445E9B-6AF9-4742-99F7-C1E3D22A6F0C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{07445E9B-6AF9-4742-99F7-C1E3D22A6F0C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{07445E9B-6AF9-4742-99F7-C1E3D22A6F0C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3459C37D-A2B1-4238-8F70-7A22B5BA5BEC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3459C37D-A2B1-4238-8F70-7A22B5BA5BEC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3459C37D-A2B1-4238-8F70-7A22B5BA5BEC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3459C37D-A2B1-4238-8F70-7A22B5BA5BEC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

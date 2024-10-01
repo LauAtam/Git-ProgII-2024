@@ -1,5 +1,6 @@
 ﻿using System.Data;
 using System.Data.SqlClient;
+using System.Net.Http.Headers;
 using FacturacionBack.Modelos;
 
 namespace FacturacionBack.Datos.Repositorios
@@ -65,7 +66,25 @@ namespace FacturacionBack.Datos.Repositorios
 
         public override Factura ObtenerPorId(int id)
         {
-            throw new NotImplementedException();
+            Factura factura = new();
+            SqlParameter param = new SqlParameter("id", id);
+            DataTable? dtFactura = _helper.EjecutarSP("SP_RECUPERAR_FACTURAS_POR_ID", param);
+            if (dtFactura != null && dtFactura.Rows.Count > 0)
+            {
+                foreach (DataRow row in dtFactura.Rows)
+                {
+                    factura.Id = (int)row["id"];
+                    factura.Fecha = (DateTime)row["id"];
+                    factura.FormaPago = formaPagoRepository.ObtenerPorId((int)row["id_forma_pago"]);
+                    factura.NombreCliente = (string)row["id"];
+                    factura.Detalles = detalleFacturaRepository.ObtenerPorIdMaestro(factura.Id);
+                }
+            }
+            else
+            {
+                return factura;
+            }
+            return factura;
         }
 
         public override List<Factura> ObtenerTodos()

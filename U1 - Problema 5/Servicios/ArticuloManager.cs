@@ -11,7 +11,7 @@ namespace U1___Problema_5.Servicios
         internal Articulo SeleccionarArticulo()
         {
             bool validInput = false;
-            int id = 0;
+            int index = 0;
             List<Articulo> lstArticulos = _articuloRepository.ObtenerTodos();
             while (!validInput)
             {
@@ -21,12 +21,12 @@ namespace U1___Problema_5.Servicios
                 }
                 Console.Write($"\nSeleccione un artículo: ");
                 var input = Console.ReadLine();
-                validInput = int.TryParse(input, out id);
-                id--;
-                if (id > lstArticulos.Count || id < 0)
+                validInput = int.TryParse(input, out index);
+                index--;
+                if (index > lstArticulos.Count || index < 0)
                     validInput = false;
             }
-            return lstArticulos[id];
+            return lstArticulos[index];
         }
     }
 }

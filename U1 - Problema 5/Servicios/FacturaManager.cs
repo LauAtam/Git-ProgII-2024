@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System.Collections.Immutable;
+using System.Diagnostics;
 using U1___Problema_5.Datos.Repositorios;
 using U1___Problema_5.Modelos;
 
@@ -23,8 +24,7 @@ namespace U1___Problema_5.Servicios
                 detalle.Articulo = _articuloManager.SeleccionarArticulo();
                 Console.Write("Ingrese la cantidad del articulo: ");
                 detalle.Cantidad = int.Parse(Console.ReadLine());
-                factura.Detalles.Add(detalle);
-
+                factura.AgregarDetalle(detalle);
                 Console.WriteLine("Agregar otro detalle? y/n");
                 string input = Console.ReadLine().ToLower();
                 if (input == "n" || input == "no")
@@ -32,14 +32,46 @@ namespace U1___Problema_5.Servicios
             }
             return _facturaRepository.Guardar(factura);
         }
-        public bool EliminarFacturaYDetalles(Factura factura)
+
+        public void ObtenerFacturas()
         {
-            return _facturaRepository.Eliminar(factura);
+            List<Factura> facturas = _facturaRepository.ObtenerTodos();
+            foreach (Factura f in facturas)
+            {
+                Console.WriteLine("########################################");
+                Console.WriteLine(f.ToString());
+            }
         }
 
-        public List<Factura> ObtenerFacturas()
+        internal void EliminarFactura()
         {
-            return _facturaRepository.ObtenerTodos();
+            List<Factura> facturas = _facturaRepository.ObtenerTodos();
+            foreach (Factura f in facturas)
+            {
+                Console.WriteLine($"{f.Id} - {f.NombreCliente} - {f.Fecha}");
+            }
+            Console.Write($"\n----------------------------------------\n" +
+                $"Seleccione la factura a eliminar: ");
+            var input = Console.ReadLine();
+            int index;
+            int.TryParse(input, out index);
+            Factura? factura = facturas.Find(f => f.Id == index);
+            if (factura != null && facturas.Exists(f => f.Equals(factura)))
+            {
+                if (_facturaRepository.Eliminar(factura))
+                {
+                    Console.WriteLine($"Factura {factura.Id} eliminada exitosamente");
+                }
+                else
+                {
+                    Console.WriteLine($"No es pudo eliminar la factura {factura.Id}");
+                }
+            }
+            else
+            {
+                Console.WriteLine($"La factura con id {index} no existe");
+            }
+            Console.WriteLine("----------------------------------------\n");
         }
     }
 }

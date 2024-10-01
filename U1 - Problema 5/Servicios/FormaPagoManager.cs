@@ -11,7 +11,7 @@ namespace U1___Problema_5.Servicios
         public FormaPago? SeleccionarFormaPago()
         {
             bool validInput = false;
-            int id = 0;
+            int index = 0;
             List<FormaPago> lstFormasPago = _formaPagoRepository.ObtenerTodos();
             while (!validInput)
             {
@@ -21,12 +21,12 @@ namespace U1___Problema_5.Servicios
                 }
                 Console.Write($"\nSeleccione una forma de pago: ");
                 var input = Console.ReadLine();
-                validInput = int.TryParse(input, out id);
-                id--;
-                if (id > lstFormasPago.Count || id < 0)
+                validInput = int.TryParse(input, out index);
+                index--;
+                if (index > lstFormasPago.Count || index < 0)
                     validInput = false;
             }
-            return lstFormasPago[id];
+            return lstFormasPago[index];
         }
     }
 }

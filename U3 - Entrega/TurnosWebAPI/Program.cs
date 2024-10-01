@@ -1,4 +1,9 @@
-namespace ArticulosWebApi
+
+using Data.Models;
+using Data.Repositories;
+using Microsoft.EntityFrameworkCore;
+
+namespace TurnosWebAPI
 {
     public class Program
     {
@@ -7,7 +12,10 @@ namespace ArticulosWebApi
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
-
+            builder.Services.AddDbContext<TurnosDbContext>(
+                options => options.UseSqlServer(builder.Configuration.GetConnectionString("TurnosConnectionString"))
+                );
+            builder.Services.AddScoped<IServicioRepository, ServicioRepository>();
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();

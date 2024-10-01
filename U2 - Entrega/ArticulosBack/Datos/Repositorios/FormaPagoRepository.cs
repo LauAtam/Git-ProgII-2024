@@ -19,7 +19,8 @@ namespace FacturacionBack.Datos.Repositorios
         public override FormaPago ObtenerPorId(int id)
         {
             FormaPago formaPago = new FormaPago();
-            DataTable dtFormaPago = _helper.EjecutarSP("SP_RECUPERAR_FORMAS_PAGO_POR_ID", new SqlParameter("@id", id));
+            SqlParameter param = new SqlParameter("@id", id);
+            DataTable? dtFormaPago = _helper.EjecutarSP("SP_RECUPERAR_FORMAS_PAGO_POR_ID", param);
             if (dtFormaPago != null && dtFormaPago.Rows.Count > 0)
             {
                 foreach (DataRow row in dtFormaPago.Rows)
